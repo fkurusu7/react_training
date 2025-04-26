@@ -1,0 +1,52 @@
+.projects {
+  & {
+    box-shadow: var(--box-shadow-lg);
+
+    border-radius: var(--border-radius-lg);
+    color: var(--color-grey-600);
+    min-height: 75rem;
+    outline: 0.5rem dotted var(--color-grey-200);
+    padding: 3rem;
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  &__card {
+    box-shadow: var(--box-shadow-lg);
+
+    &:hover {
+      background-color: var(--color-grey-200);
+
+      & h2 {
+        color: var(--color-grey-700);
+      }
+    }
+    &:active {
+      box-shadow: var(--box-shadow-sm);
+    }
+
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    height: 20rem;
+    outline: 1px solid var(--color-grey-200);
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.4s ease-in-out;
+    width: 25rem;
+
+    & h2 {
+      text-transform: uppercase;
+      transition: color 0.4s ease-in-out;
+    }
+
+    & p {
+      font-size: 1.7rem;
+      color: var(--color-grey-600);
+    }
+  }
+}
