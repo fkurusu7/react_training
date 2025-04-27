@@ -8,7 +8,11 @@ const App = () => {
 
       <section className="projects">
         {projects.map((project) => (
-          <ProjectCard name={project.name} description={project.description} />
+          <ProjectCard
+            name={project.name}
+            description={project.description}
+            component={project.component}
+          />
         ))}
       </section>
     </section>

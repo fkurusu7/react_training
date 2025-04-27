@@ -28,6 +28,7 @@
     }
     &:active {
       box-shadow: var(--box-shadow-sm);
+      transform: scale(0.9999);
     }
 
     border-radius: var(--border-radius-lg);
@@ -36,7 +37,8 @@
     outline: 1px solid var(--color-grey-200);
     overflow: hidden;
     padding: 0.5rem 1rem;
-    transition: background-color 0.4s ease-in-out;
+    transition: background-color 0.4s ease-in-out, transform 0.3s ease-in-out,
+      box-shadow 0.4s ease-in-out, transform 0.3s ease-in-out;
     width: 25rem;
 
     & h2 {

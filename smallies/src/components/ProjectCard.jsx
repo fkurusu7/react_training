@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useModal } from "../hooks/useModal";
 import Modal from "./Modal";
 
-const ProjectCard = ({ name, description }) => {
+const ProjectCard = ({ name, description, component: Component }) => {
   const { isOpenModal, closeModal, toggleModal } = useModal();
 
   return (
@@ -13,7 +14,7 @@ const ProjectCard = ({ name, description }) => {
       </article>
       {isOpenModal && (
         <Modal onClose={closeModal}>
-          <h2>HOOOOLL</h2>
+          <Component />
         </Modal>
       )}
     </>
