@@ -8,7 +8,7 @@ const Modal = ({ onClose, children }) => {
   return createPortal(
     <div className="modal__overlay">
       <div className="modal__container" ref={ref}>
-        <button className="modal__button" onClick={onClose}>
+        <button className="modal__button" onClick={() => onClose(ref)}>
           X
         </button>
         <div>{children}</div>
