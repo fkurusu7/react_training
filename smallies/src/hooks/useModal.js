@@ -5,7 +5,9 @@ export function useModal() {
 
   const openModal = () => setIsOpenModal(true);
   const closeModal = (ref) => {
-    ref.current?.classList.add("closing");
+    // Add the closing class to the parent
+    const modalOverlay = ref.current?.parentElement;
+    modalOverlay.classList.add("closing");
 
     setTimeout(() => {
       setIsOpenModal(false);

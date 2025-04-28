@@ -11,7 +11,7 @@ const Modal = ({ onClose, children }) => {
         <button className="modal__button" onClick={() => onClose(ref)}>
           X
         </button>
-        <div>{children}</div>
+        <div className="modal__project">{children}</div>
       </div>
     </div>,
     document.body

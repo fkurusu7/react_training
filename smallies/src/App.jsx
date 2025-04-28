@@ -9,6 +9,7 @@ const App = () => {
       <section className="projects">
         {projects.map((project) => (
           <ProjectCard
+            key={project.name + project.id}
             name={project.name}
             description={project.description}
             component={project.component}

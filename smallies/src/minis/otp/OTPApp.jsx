@@ -1,7 +1,7 @@
 import React from "react";
 
-const OTP = () => {
+const OTPApp = () => {
   return <div>OTP</div>;
 };
 
-export default OTP;
+export default OTPApp;

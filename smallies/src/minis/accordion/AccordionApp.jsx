@@ -1,7 +1,7 @@
 import React from "react";
 
-const Accordion = () => {
+const AccordionApp = () => {
   return <div>Accordion</div>;
 };
 
-export default Accordion;
+export default AccordionApp;
