@@ -10,6 +10,9 @@ lerna-debug.log*
 smallies/node_modules
 smallies/dist
 smallies/.env
+anson/node_modules
+anson/dist
+anson/.env
 *.local
 
 # Editor directories and files

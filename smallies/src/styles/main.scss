@@ -1,11 +1,12 @@
 // Layout
-@use "base/variables" as *;
-@use "base/base" as *;
-@use "base/layout" as *;
+@use 'base/variables' as *;
+@use 'base/base' as *;
+@use 'base/layout' as *;
 
 // Components
-@use "components/projects" as *;
-@use "components/modal" as *;
+@use 'components/modal' as *;
+@use 'components/projects' as *;
 
 // Minis
-@use "minis/tooltip" as *;
+@use 'minis/tooltip' as *;
+@use 'minis/pagination' as *;
