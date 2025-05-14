@@ -7,17 +7,30 @@
     min-height: 75rem;
     outline: 0.5rem dotted var(--color-grey-200);
     padding: 3rem;
-    width: 100%;
+    max-width: 110rem;
 
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    // display: flex;
+    // // align-items: flex-start;
+    // justify-content: center;
+    // flex-wrap: wrap;
+    // column-gap: 3rem;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 3rem;
   }
 
   &__card {
     box-shadow: var(--box-shadow-lg);
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    height: 17rem;
+    overflow: hidden;
+    outline: 1px solid var(--color-grey-200);
+    padding: 0.5rem 0.7rem;
+    transition: background-color 0.4s ease-in-out, transform 0.3s ease-in-out,
+      box-shadow 0.4s ease-in-out, transform 0.3s ease-in-out;
+    width: 20rem;
 
     &:hover {
       background-color: var(--color-grey-200);
@@ -31,23 +44,14 @@
       transform: scale(0.9999);
     }
 
-    border-radius: var(--border-radius-lg);
-    cursor: pointer;
-    height: 20rem;
-    outline: 1px solid var(--color-grey-200);
-    overflow: hidden;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.4s ease-in-out, transform 0.3s ease-in-out,
-      box-shadow 0.4s ease-in-out, transform 0.3s ease-in-out;
-    width: 25rem;
-
     & h2 {
       text-transform: uppercase;
+      text-align: center;
       transition: color 0.4s ease-in-out;
     }
 
     & p {
-      font-size: 1.7rem;
+      font-size: 1.4rem;
       color: var(--color-grey-600);
     }
   }
