@@ -1,6 +1,9 @@
 import AccordionApp from './minis/accordion/AccordionApp';
+import CountryCapitalGame from './minis/game/country-capital/CountryCapitalGame';
 import OTPApp from './minis/otp/OTPApp';
 import Pagination from './minis/pagination/Pagination';
+import PasswordGenerator from './minis/passgen/PasswordGenerator';
+import Stepper from './minis/stepper/Stepper';
 import TooltipApp from './minis/tooltip/TooltipApp';
 
 const projects = [
@@ -31,6 +34,25 @@ const projects = [
     component: Pagination,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adus doloribus id quae commodi laboriosam explicabo.',
+  },
+  {
+    id: `${new Date().toISOString()} + ${crypto.randomUUID()}`,
+    name: 'Stepper',
+    component: Stepper,
+    description: 'Stepping like in a ecommerce cart!',
+  },
+  {
+    id: `${new Date().toISOString()} + ${crypto.randomUUID()}`,
+    name: 'Game Match',
+    component: CountryCapitalGame,
+    description: 'Match country with its capital',
+  },
+  {
+    id: `${new Date().toISOString()} + ${crypto.randomUUID()}`,
+    name: 'Password Generator',
+    component: PasswordGenerator,
+    description:
+      'Generate a password with lowercase, uppercase letters, numbers and symbols',
   },
 ];
 

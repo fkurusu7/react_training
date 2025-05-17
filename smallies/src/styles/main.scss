@@ -8,6 +8,8 @@
 @use 'components/projects' as *;
 
 // Minis
-@use 'minis/tooltip' as *;
-@use 'minis/pagination' as *;
+@use 'minis/gamecountrycpital' as *;
 @use 'minis/otp' as *;
+@use 'minis/pagination' as *;
+@use 'minis/stepper' as *;
+@use 'minis/tooltip' as *;
