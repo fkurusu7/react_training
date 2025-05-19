@@ -13,6 +13,9 @@ smallies/.env
 anson/node_modules
 anson/dist
 anson/.env
+jonas/ultimate-react-course
+jonas/usepopcorn/node_modules
+jonas/usepopcorn/dist
 *.local
 
 # Editor directories and files
