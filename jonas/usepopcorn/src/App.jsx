@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const tempMovieData = [
   {
@@ -66,8 +66,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState('');
+function Search({ query, setQuery }) {
   return (
     <input
       className='search'
@@ -82,7 +81,7 @@ function Search() {
 function NumResults({ movies }) {
   return (
     <p className='num-results'>
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 }
@@ -96,9 +95,25 @@ function Navbar({ children }) {
   );
 }
 
-function Movie({ movie }) {
+function MovieDetails({ selectedId, onCloseMovie }) {
   return (
-    <li key={movie.imdbID}>
+    <div className='details'>
+      <button
+        className='btn-back'
+        onClick={() => {
+          onCloseMovie();
+        }}
+      >
+        &larr;
+      </button>
+      {selectedId}
+    </div>
+  );
+}
+
+function Movie({ movie, onSelectMovie }) {
+  return (
+    <li key={movie.imdbID} onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -111,11 +126,11 @@ function Movie({ movie }) {
   );
 }
 
-function MoviesList({ movies }) {
+function MoviesList({ movies, onSelectMovie }) {
   return (
-    <ul className='list'>
+    <ul className='list list-movies'>
       {movies?.map((movie) => (
-        <Movie key={movie.imdbID} movie={movie} />
+        <Movie key={movie.imdbID} movie={movie} onSelectMovie={onSelectMovie} />
       ))}
     </ul>
   );
@@ -199,22 +214,108 @@ function Main({ children }) {
   return <main className='main'>{children}</main>;
 }
 
+function Loader() {
+  return <p className='loader'>Loading...</p>;
+}
+
+function ErrorMessage({ error }) {
+  return <p className='error'>{error}</p>;
+}
+
 function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState('');
+  const [watched, setWatched] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(undefined);
+
+  const [selectedId, setSelectedId] = useState(null);
+
+  const OMDB_API_URI = 'http://www.omdbapi.com/?i=tt3896198&apikey=bfb73349';
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleCloseSelectedMovie() {
+    setSelectedId(null);
+  }
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const fetchMovies = async () => {
+      try {
+        setIsLoading(true);
+        setError(undefined);
+        const response = await fetch(`${OMDB_API_URI}&s=${query}`, {
+          signal: abortController.signal,
+        });
+        if (!response.ok) throw new Error('Something went wrong');
+        const jsonRes = await response.json();
+
+        if (jsonRes.Response === 'False') {
+          throw new Error('Movie not found');
+        }
+
+        setMovies(jsonRes.Search);
+      } catch (error) {
+        if (error.message === 'signal is aborted without reason') {
+          setError(undefined);
+        } else {
+          console.log(typeof error, error, error.message);
+          setError(error.message);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (query.length <= 2) {
+      setMovies([]);
+      setError(undefined);
+      return;
+    }
+    fetchMovies();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [query]);
+
   return (
     <>
       <Navbar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </Navbar>
       <Main>
         <Box>
-          <MoviesList movies={movies} />
+          {/* {error ? (
+            <ErrorMessage error={error} />
+          ) : isLoading ? (
+            <Loader />
+          ) : (
+            <MoviesList movies={movies} />
+          )} */}
+          {isLoading && <Loader />}
+          {!isLoading && !error && (
+            <MoviesList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
+          {error && <ErrorMessage error={error} />}
         </Box>
         <Box>
-          <Summary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseSelectedMovie}
+            />
+          ) : (
+            <>
+              <Summary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
