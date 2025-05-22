@@ -139,9 +139,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         setMovie(data);
       } catch (error) {
         console.error(error, error.message);
-        setError(error.message);
+        if (error.name !== 'AbortError') {
+          setError(error.message);
+        }
       } finally {
         setIsLoading(false);
+        setError(undefined);
       }
     }
 
@@ -150,6 +153,30 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       abortController.abort();
     };
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+
+    return () => (document.title = 'Use Popcorn');
+  }, [title]);
+
+  useEffect(
+    function () {
+      const handleKeydown = function (ev) {
+        if (ev.code === 'Escape') {
+          onCloseMovie();
+        }
+      };
+
+      document.addEventListener('keydown', handleKeydown);
+
+      return function () {
+        document.removeEventListener('keydown', handleKeydown);
+      };
+    },
+    [onCloseMovie]
+  );
 
   function handleAdd() {
     const newWatchedMovie = {
@@ -397,13 +424,12 @@ function App() {
 
         setMovies(jsonRes.Search);
       } catch (error) {
-        if (error.message === 'signal is aborted without reason') {
-          setError(undefined);
-        } else {
+        if (error.name !== 'AbortError') {
           setError(error.message);
         }
       } finally {
         setIsLoading(false);
+        setError(undefined);
       }
     };
 
@@ -412,6 +438,8 @@ function App() {
       setError(undefined);
       return;
     }
+
+    handleCloseSelectedMovie();
     fetchMovies();
 
     return () => {
