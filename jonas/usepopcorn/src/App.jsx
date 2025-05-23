@@ -53,6 +53,7 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const OMDB_API_URI = 'http://www.omdbapi.com/?apikey=bfb73349';
+const WATCHED_LS_KEY = 'watched';
 
 /***************************/
 /***************************/
@@ -380,10 +381,15 @@ function ErrorMessage({ error }) {
 
 function App() {
   const [query, setQuery] = useState('');
-  const [watched, setWatched] = useState([]);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(undefined);
+
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const watchedStorage = window.localStorage.getItem(WATCHED_LS_KEY);
+    return JSON.parse(watchedStorage);
+  });
 
   const [selectedId, setSelectedId] = useState(null);
 
@@ -399,11 +405,15 @@ function App() {
     setWatched((watched) => [...watched, movie]);
   }
 
-  function handleRemoveMovie(movieId) {
+  function handleRemoveWatchedMovie(movieId) {
     setWatched((currWatchedMovies) =>
       currWatchedMovies.filter((watched) => watched.imdbID !== movieId)
     );
   }
+
+  useEffect(() => {
+    window.localStorage.setItem(WATCHED_LS_KEY, JSON.stringify(watched));
+  }, [watched]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -474,7 +484,7 @@ function App() {
               <Summary watched={watched} />
               <WatchedMoviesList
                 watched={watched}
-                handleRemoveMovie={handleRemoveMovie}
+                handleRemoveMovie={handleRemoveWatchedMovie}
               />
             </>
           )}
