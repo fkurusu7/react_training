@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import StarRating from './components/StarRating';
+import { useLocalStorageState } from './hooks/useLocalStorageState';
+import { useMovies } from './hooks/useMovies';
 
 const tempMovieData = [
   {
@@ -52,7 +54,7 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const OMDB_API_URI = 'http://www.omdbapi.com/?apikey=bfb73349';
+export const OMDB_API_URI = 'http://www.omdbapi.com/?apikey=bfb73349';
 const WATCHED_LS_KEY = 'watched';
 
 /***************************/
@@ -71,6 +73,22 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    const addKeydownEvent = (ev) => {
+      if (document.activeElement === searchInputRef.current) return;
+
+      if (ev.code === 'Enter') {
+        searchInputRef.current.focus();
+        setQuery('');
+      }
+    };
+    document.addEventListener('keydown', addKeydownEvent);
+
+    return () => document.removeEventListener('keydown', addKeydownEvent);
+  }, [setQuery]);
+
   return (
     <input
       className='search'
@@ -78,6 +96,7 @@ function Search({ query, setQuery }) {
       placeholder='Search movies...'
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={searchInputRef}
     />
   );
 }
@@ -381,17 +400,18 @@ function ErrorMessage({ error }) {
 
 function App() {
   const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(undefined);
-
-  // const [watched, setWatched] = useState([]);
-  const [watched, setWatched] = useState(function () {
-    const watchedStorage = window.localStorage.getItem(WATCHED_LS_KEY);
-    return JSON.parse(watchedStorage);
-  });
 
   const [selectedId, setSelectedId] = useState(null);
+  // const [watched, setWatched] = useState([]);
+  const { value: watched, setValue: setWatched } = useLocalStorageState(
+    [],
+    WATCHED_LS_KEY
+  );
+
+  const { movies, isLoading, error } = useMovies(
+    query,
+    handleCloseSelectedMovie
+  );
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -411,11 +431,7 @@ function App() {
     );
   }
 
-  useEffect(() => {
-    window.localStorage.setItem(WATCHED_LS_KEY, JSON.stringify(watched));
-  }, [watched]);
-
-  useEffect(() => {
+  /*   useEffect(() => {
     const abortController = new AbortController();
 
     const fetchMovies = async () => {
@@ -456,6 +472,7 @@ function App() {
       abortController.abort();
     };
   }, [query]);
+ */
 
   return (
     <>
