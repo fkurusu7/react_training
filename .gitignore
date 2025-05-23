@@ -16,6 +16,8 @@ anson/.env
 jonas/ultimate-react-course
 jonas/usepopcorn/node_modules
 jonas/usepopcorn/dist
+jonas/quisereducer/node_modules
+jonas/quisereducer/dist
 *.local
 
 # Editor directories and files
