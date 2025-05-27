@@ -18,6 +18,8 @@ jonas/usepopcorn/node_modules
 jonas/usepopcorn/dist
 jonas/quisereducer/node_modules
 jonas/quisereducer/dist
+jonas/worldwise/node_modules
+jonas/worldwise/dist
 *.local
 
 # Editor directories and files
