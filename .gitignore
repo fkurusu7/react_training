@@ -20,6 +20,8 @@ jonas/quisereducer/node_modules
 jonas/quisereducer/dist
 jonas/worldwise/node_modules
 jonas/worldwise/dist
+typescript-tutorial/node_modules
+typescript-tutorial/dist
 *.local
 
 # Editor directories and files

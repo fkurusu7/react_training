@@ -1,37 +1,96 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 
 const CitiesContext = createContext();
 
+const CITIES_URI = 'http://localhost:3000/cities';
+
+const REDUCER_ACTION_TYPES = {
+  Loading: 'cities/loading',
+  Loaded: 'cities/loaded',
+  CityLoaded: 'city/loaded',
+  Created: 'city/created',
+  Deleted: 'city/deleted',
+  Rejected: 'cities/rejected',
+  Unknown: 'Unknown action type',
+};
+const initialState = {
+  cities: [],
+  isLoading: false,
+  currentCity: {},
+  error: undefined,
+};
+
+// handles business logic, should be pure functions, no api requests
+function citiesReducer(state, action) {
+  const { type, payload } = action;
+
+  switch (type) {
+    case REDUCER_ACTION_TYPES.Loading:
+      return { ...state, isLoading: true };
+
+    case REDUCER_ACTION_TYPES.CityLoaded:
+      return { ...state, isLoading: false, currentCity: payload };
+
+    case REDUCER_ACTION_TYPES.Loaded:
+      return { ...state, isLoading: false, cities: payload };
+
+    case REDUCER_ACTION_TYPES.Created:
+      return {
+        ...state,
+        isLoading: false,
+        cities: [...state.cities, payload],
+        currentCity: payload,
+      };
+
+    case REDUCER_ACTION_TYPES.Deleted:
+      // payload === to the passed id
+      return {
+        ...state,
+        isLoading: false,
+        cities: state.cities.filter((city) => city.id === payload),
+      };
+
+    // Errors
+    case REDUCER_ACTION_TYPES.Rejected:
+      return { ...state, isLoading: false, error: payload };
+
+    default:
+      throw new Error(REDUCER_ACTION_TYPES.Unknown);
+  }
+}
+
 // use this provider as a top-level component
 function CitiesProvider({ children }) {
-  const CITIES_URI = 'http://localhost:3000/cities';
-  const [cities, setCities] = useState([]);
-  const [isLoadingCities, setIsLoadingCities] = useState(false);
-  const [errorCities, setErrorCities] = useState(undefined);
-
-  const [currentCity, setCurrentCity] = useState({});
-  const [isLoadingCity, setIsLoadingCity] = useState(false);
-  const [isLoadingCityCreate, setIsLoadingCityCreate] = useState(false);
-  const [errorCityCreate, setErrorCityCreate] = useState(undefined);
+  const [state, dispatch] = useReducer(citiesReducer, initialState);
+  const { cities, isLoading, currentCity, error } = state;
 
   useEffect(() => {
     const abortController = new AbortController();
     const fetchCities = async () => {
+      dispatch({ type: REDUCER_ACTION_TYPES.Loading });
+
       try {
-        setIsLoadingCities((curState) => !curState);
         const response = await fetch(CITIES_URI, {
           signal: abortController.signal,
         });
         if (!response.ok) throw new Error('Error fetching cities');
 
         const data = await response.json();
-        setCities(data);
+
+        dispatch({ type: REDUCER_ACTION_TYPES.Loaded, payload: data });
       } catch (err) {
-        setErrorCities(err.message);
-      } finally {
-        setIsLoadingCities((curState) => !curState);
+        dispatch({
+          type: REDUCER_ACTION_TYPES.Rejected,
+          payload: 'There was an error loading data...',
+        });
       }
     };
 
@@ -42,32 +101,38 @@ function CitiesProvider({ children }) {
     };
   }, []);
 
-  async function getCity(id) {
-    const abortController = new AbortController();
-    try {
-      setIsLoadingCity(true);
-      const response = await fetch(`${CITIES_URI}/${id}`, {
-        signal: abortController.signal,
-      });
+  const getCity = useCallback(
+    async function getCity(id) {
+      if (Number(id) === currentCity.id) return;
 
-      if (!response.ok) {
-        throw new Error('Error fetching City data');
+      const abortController = new AbortController();
+      try {
+        dispatch({ type: REDUCER_ACTION_TYPES.Loading });
+        const response = await fetch(`${CITIES_URI}/${id}`, {
+          signal: abortController.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error('Error fetching City data');
+        }
+
+        const data = await response.json();
+        dispatch({ type: REDUCER_ACTION_TYPES.CityLoaded, payload: data });
+      } catch (error) {
+        abortController.abort();
+        dispatch({
+          type: REDUCER_ACTION_TYPES.Rejected,
+          payload: error.message,
+        });
       }
-
-      const data = await response.json();
-      setCurrentCity(data);
-    } catch (error) {
-      console.log(error.message);
-      abortController.abort();
-    } finally {
-      setIsLoadingCity(false);
-    }
-  }
+    },
+    [currentCity.id]
+  );
 
   async function createCity(newCity) {
     const abortController = new AbortController();
     try {
-      setIsLoadingCityCreate(true);
+      dispatch({ type: REDUCER_ACTION_TYPES.Loading });
       const response = await fetch(CITIES_URI, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,12 +140,10 @@ function CitiesProvider({ children }) {
         signal: abortController.signal,
       });
       const data = await response.json();
-      setCities((cities) => [...cities, data]);
+      dispatch({ type: REDUCER_ACTION_TYPES.Created, payload: data });
     } catch (error) {
-      console.log(error);
-      setErrorCityCreate(error.message);
-    } finally {
-      setIsLoadingCityCreate(false);
+      abortController.abort();
+      dispatch({ type: REDUCER_ACTION_TYPES.Rejected, payload: error.message });
     }
   }
 
@@ -89,10 +152,10 @@ function CitiesProvider({ children }) {
       await fetch(`${CITIES_URI}/${id}`, {
         method: 'DELETE',
       });
-      setCities((cities) => cities.filter((city) => city.id !== id));
+      dispatch({ type: REDUCER_ACTION_TYPES.Deleted, payload: id });
     } catch (error) {
-      console.log(error);
       alert('Error deleting city');
+      dispatch({ type: REDUCER_ACTION_TYPES.Rejected, payload: error.message });
     }
   }
 
@@ -100,15 +163,12 @@ function CitiesProvider({ children }) {
     <CitiesContext.Provider
       value={{
         cities,
-        isLoadingCities,
-        errorCities,
+        isLoading,
         currentCity,
         getCity,
-        isLoadingCity,
         createCity,
-        isLoadingCityCreate,
-        errorCityCreate,
         deleteCity,
+        error,
       }}
     >
       {children}
