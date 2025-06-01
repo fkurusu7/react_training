@@ -22,6 +22,11 @@ jonas/worldwise/node_modules
 jonas/worldwise/dist
 typescript-tutorial/node_modules
 typescript-tutorial/dist
+proshop/ui/node_modules
+proshop/ui/dist
+proshop/api/node_modules
+proshop/api/dist
+proshop/uploads
 *.local
 
 # Editor directories and files
