@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 
-config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
+config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 
 const {
   PORT,
@@ -51,7 +51,7 @@ interface ConfigInterface {
 const configSetup: ConfigInterface = {
   // Server settings
   server: {
-    port: PORT ? parseInt(PORT, 10) : 5174,
+    port: PORT ? parseInt(PORT, 10) : 5000,
     // Node.js Environment
     nodeEnv: (nodeEnv as 'development') || 'production' || 'test',
     // CORS settings
