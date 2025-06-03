@@ -35,7 +35,10 @@ export interface UseProductsReturnI {
   loading: boolean;
   error: string | null;
   // TODO: implement missing functions
-  fetchProduct: (id: string) => Promise<ProductI>;
+  fetchProduct: (
+    id: string,
+    signal: AbortSignal
+  ) => Promise<ProductI | undefined>;
   createProduct: (productData: CreateProductDataI) => Promise<ProductI>;
   /* 
   updateProduct: (id: string, productData: UpdateProductData) => Promise<Product>;

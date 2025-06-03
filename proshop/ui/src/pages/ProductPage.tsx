@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import Rating from '../components/Rating';
@@ -12,15 +12,31 @@ function ProductPage() {
 
   const [product, setProduct] = useState<ProductI>();
 
+  // Keep track of the abort controller for this component's request
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   useEffect(() => {
     async function getProduct() {
-      if (productId) {
-        const data = await fetchProduct(productId);
-        setProduct(data);
+      try {
+        if (productId) {
+          abortControllerRef.current = new AbortController();
+          const data = await fetchProduct(
+            productId,
+            abortControllerRef.current.signal
+          );
+          setProduct(data);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
 
     getProduct();
+
+    // Cleanup function to abort request if component unmounts
+    return () => {
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+    };
   }, [fetchProduct, productId]);
 
   if (!product)
