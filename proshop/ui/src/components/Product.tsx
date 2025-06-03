@@ -1,9 +1,9 @@
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import type { ProductPropsI } from '../types/ProductI';
+import type { ProductI } from '../types/product';
 import Rating from './Rating';
 
-function Product({ product }: ProductPropsI) {
+function Product({ product }: { product: ProductI }) {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/product/${product._id}`}>

@@ -1,12 +1,27 @@
+import { useEffect, useState } from 'react';
 import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import Rating from '../components/Rating';
-import products from '../data/products';
+import { useProducts } from '../hooks/useProducts';
+import type { ProductI } from '../types/product';
 
 function ProductPage() {
   const { id: productId } = useParams();
 
-  const product = products.find((product) => product._id === productId);
+  const { fetchProduct, loading, error } = useProducts();
+
+  const [product, setProduct] = useState<ProductI>();
+
+  useEffect(() => {
+    async function getProduct() {
+      if (productId) {
+        const data = await fetchProduct(productId);
+        setProduct(data);
+      }
+    }
+
+    getProduct();
+  }, [fetchProduct, productId]);
 
   if (!product)
     return (
@@ -17,6 +32,19 @@ function ProductPage() {
         <Row>
           <h3>Product not found</h3>
         </Row>
+      </>
+    );
+
+  if (loading)
+    return (
+      <>
+        <p>Loading Product Info...</p>
+      </>
+    );
+  if (error)
+    return (
+      <>
+        <p>{error}</p>
       </>
     );
 

@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 
 const {
+  // Server Config
   PORT,
   NODE_ENV,
   CORS_ORIGINS,

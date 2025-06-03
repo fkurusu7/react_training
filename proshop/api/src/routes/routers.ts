@@ -4,7 +4,7 @@ import productsRouter from './products.router';
 const router = Router();
 
 /**
- *
+ * Health Check
  */
 router.get('/', (req, res) => {
   res.status(200).send({ message: 'App is running...' });

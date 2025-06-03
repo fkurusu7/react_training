@@ -1,5 +1,5 @@
 import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import type { RatingPropsI } from '../types/RatingI';
+import type { RatingPropsI } from '../types/rating';
 
 function Rating({ value = 1, text }: RatingPropsI) {
   return (
