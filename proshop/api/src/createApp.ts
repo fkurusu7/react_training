@@ -1,6 +1,7 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import logger from './config/logger';
+import { errorHandler, notFound } from './middlewares/error.middleware';
 import router from './routes/routers';
 
 export function createApp() {
@@ -14,6 +15,9 @@ export function createApp() {
   app.use(logger.responseCapture);
 
   app.use(router);
+
+  app.use(notFound);
+  app.use(errorHandler);
 
   return app;
 }
