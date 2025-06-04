@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { mongo, server } from './environment';
 import logger from './logger';
+import { connected } from 'process';
 
 const database = {
   connectDB: async (): Promise<void> => {
@@ -54,7 +55,7 @@ const database = {
   disconnectDB: async (): Promise<void> => {
     try {
       await mongoose.disconnect();
-      logger.info('Disconnected from MongoDB successfully');
+      logger.success('Disconnected from MongoDB successfully!');
     } catch (error) {
       if (error instanceof Error)
         logger.error('Error disconnecting from MongoDB', error);
@@ -63,7 +64,9 @@ const database = {
 
   // Simple health check helper
   isConnected: (): boolean => {
-    return mongoose.connection.readyState === 1;
+    const connected = mongoose.connection.readyState === 1;
+    logger.success(`Health Check succesful. Connected: ${connected}`);
+    return connected;
   },
 };
 
