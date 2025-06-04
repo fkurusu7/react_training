@@ -12,7 +12,7 @@ const {
   JWT_EXPIRES_IN,
   JWT_COOKIE_NAME,
   // MongoDB Config
-  MONGO_URI,
+  MONGODB_URI,
   MONGO_DB_NAME,
 } = process.env;
 
@@ -69,7 +69,7 @@ const configSetup: ConfigInterface = {
 
   mongo: {
     dbName: MONGO_DB_NAME || 'test',
-    uri: MONGO_URI!,
+    uri: MONGODB_URI!,
   },
 };
 
