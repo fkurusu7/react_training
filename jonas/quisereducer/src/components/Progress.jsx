@@ -1,11 +1,4 @@
-function Progress({
-  index,
-  numQuestions,
-  points,
-  maxPoints,
-  answer,
-  highscore,
-}) {
+function Progress({ index, numQuestions, points, maxPoints, answer }) {
   return (
     <header className='progress'>
       <progress max={numQuestions} value={index + Number(answer !== null)} />
@@ -13,9 +6,8 @@ function Progress({
         Question <strong>{index + 1}</strong> / {numQuestions}
       </p>
       <p>
-        <strong>{points}</strong> / {maxPoints ?? 0}
+        <strong>{points}</strong> / {maxPoints}
       </p>
-      <p className='highscore'>Highscore: {highscore} points</p>
     </header>
   );
 }

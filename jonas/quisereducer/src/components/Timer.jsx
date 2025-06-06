@@ -1,23 +1,25 @@
 import { useEffect } from 'react';
-import { QUESTIONS_TYPE_ACTIONS } from '../utils/constants';
+import { ACTION_TYPE } from '../utils/constants';
 
-function Timer({ dispatch, secondsRemaining }) {
+function Timer({ secondsRemaining, dispatch }) {
   const minutes = Math.floor(secondsRemaining / 60);
-  const seconds = Math.floor(secondsRemaining % 60);
+  const secondss = Math.floor(secondsRemaining % 60);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      dispatch({ type: QUESTIONS_TYPE_ACTIONS.Tick });
+    const idInterval = setInterval(() => {
+      dispatch({ type: ACTION_TYPE.Tick });
     }, 1000);
 
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(idInterval);
+    };
   }, [dispatch]);
 
   return (
     <div className='timer'>
-      {minutes < 10 ? '0' : ''}
-      {minutes}:{seconds < 10 ? '0' : ''}
-      {seconds}
+      {minutes < 10 && 0}
+      {minutes}:{secondsRemaining < 10 && 0}
+      {secondss}
     </div>
   );
 }

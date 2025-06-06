@@ -1,19 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useCities } from '../contexts/CitiesContext';
 import CityItem from './CityItem';
 import styles from './CityList.module.css';
 import Message from './Message';
 import Spinner from './Spinner';
 
-function CityList() {
-  const { cities, isLoadingCities: isLoading } = useCities();
-
-  if (isLoading) return <Spinner />;
-
-  if (!cities.length)
-    return (
-      <Message message='Add your first city by clicking on a city on the map' />
-    );
+function CityList({ cities, isLoading }) {
+  console.log(isLoading, cities);
+  if (isLoading && !cities.length) return <Spinner />;
+  if (!cities.length) return <Message message='Add your first city' />;
 
   return (
     <ul className={styles.cityList}>

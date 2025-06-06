@@ -16,7 +16,7 @@ export function errorHandler(
 ) {
   let statusCode = res.statusCode || 500;
   let errorMessage = error.message || 'Internal Server Error';
-  const stack = server.nodeEnv === 'development' ? error.stack : '';
+  const stack = server.nodeEnv === 'development' ? error.stack : '🥞';
 
   res.status(statusCode).send(errorResponse(errorMessage, stack));
 }

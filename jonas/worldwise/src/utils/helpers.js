@@ -5,11 +5,3 @@ export const formatDate = (date) =>
     year: 'numeric',
     weekday: 'long',
   }).format(new Date(date));
-
-export function convertToEmoji(countryCode) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map((char) => 127397 + char.charCodeAt());
-  return String.fromCodePoint(...codePoints);
-}

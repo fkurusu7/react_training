@@ -1,22 +1,23 @@
-import { QUESTIONS_TYPE_ACTIONS } from '../utils/constants';
+import { ACTION_TYPE } from '../utils/constants';
 
 function Options({ question, dispatch, answer }) {
-  const hasAnswered = answer !== null;
+  const hasAnswer = answer !== null;
+
   return (
     <div className='options'>
-      {question.options.map((option, index) => (
+      {question.options.map((option, idx) => (
         <button
-          className={`btn btn-option ${index === answer ? 'answer' : ''} ${
-            hasAnswered
-              ? index === question.correctOption
+          key={idx + 1}
+          className={`btn btn-option ${idx === answer ? 'answer' : ''} ${
+            hasAnswer
+              ? idx === question.correctOption
                 ? 'correct'
                 : 'wrong'
               : ''
           }`}
-          disabled={hasAnswered}
-          key={option}
+          disabled={hasAnswer}
           onClick={() =>
-            dispatch({ type: QUESTIONS_TYPE_ACTIONS.NewAnswer, payload: index })
+            dispatch({ type: ACTION_TYPE.NewAnswer, payload: idx })
           }
         >
           {option}

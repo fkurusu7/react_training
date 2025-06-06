@@ -1,7 +1,6 @@
 import { useEffect, useReducer } from 'react';
-
 import Error from './components/Error';
-import FinishScreen from './components/FinishScreen';
+import FinishedScreen from './components/FinishedScreen';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Loader from './components/Loader';
@@ -11,13 +10,13 @@ import Progress from './components/Progress';
 import Question from './components/Question';
 import StartScreen from './components/StartScreen';
 import Timer from './components/Timer';
-import { QUESTIONS_TYPE_ACTIONS, STATUS_DATA } from './utils/constants';
+import { ACTION_TYPE, STATUS_STATE } from './utils/constants';
 
 const QUESTIONS_URI = 'http://localhost:3000/questions';
 
 const initialState = {
   questions: [],
-  status: STATUS_DATA.Loading,
+  status: STATUS_STATE.Loading,
   index: 0,
   answer: null,
   points: 0,
@@ -25,70 +24,68 @@ const initialState = {
   secondsRemaining: null,
 };
 
-const SECONDS_PER_QUESTION = 30;
+const SECONDS_PER_QUESTION = 15;
+
 function quizReducer(state, action) {
-  switch (action.type) {
-    case QUESTIONS_TYPE_ACTIONS.DataReceived:
-      return { ...state, questions: action.payload, status: STATUS_DATA.Ready };
+  const { type, payload } = action;
 
-    case QUESTIONS_TYPE_ACTIONS.DataFailed:
-      return { ...state, status: STATUS_DATA.Error };
-
-    case QUESTIONS_TYPE_ACTIONS.Start:
+  switch (type) {
+    case ACTION_TYPE.DataReceived:
+      return { ...state, questions: payload, status: STATUS_STATE.Ready };
+    case ACTION_TYPE.DataFailed:
+      return { ...state, status: STATUS_STATE.Error };
+    case ACTION_TYPE.Start:
       return {
         ...state,
-        status: STATUS_DATA.Active,
+        status: STATUS_STATE.Active,
         secondsRemaining: state.questions.length * SECONDS_PER_QUESTION,
       };
-
-    case QUESTIONS_TYPE_ACTIONS.NewAnswer: {
-      const currentQuestion = state.questions.at(state.index);
-      const stateAnswer = action.payload;
+    case ACTION_TYPE.NewAnswer: {
+      const question = state.questions.at(state.index);
 
       return {
         ...state,
-        answer: stateAnswer,
+        answer: payload,
         points:
-          stateAnswer === currentQuestion.correctOption
-            ? state.points + currentQuestion.points
+          question.correctOption === action.payload
+            ? state.points + question.points
             : state.points,
       };
     }
-    case QUESTIONS_TYPE_ACTIONS.NextQuestion:
-      return { ...state, index: state.index + 1, answer: null };
-
-    case QUESTIONS_TYPE_ACTIONS.Finish: {
-      const highscore = Math.max(state.highscore, state.points);
-      return { ...state, status: STATUS_DATA.Finished, highscore };
-    }
-
-    case QUESTIONS_TYPE_ACTIONS.Restart:
+    case ACTION_TYPE.NextQuestion:
+      return { ...state, index: state.index++, answer: null };
+    case ACTION_TYPE.Finish:
+      return {
+        ...state,
+        status: STATUS_STATE.Finished,
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+    case ACTION_TYPE.Restart:
       return {
         ...initialState,
-        status: STATUS_DATA.Ready,
         questions: state.questions,
+        status: STATUS_STATE.Ready,
         highscore: state.highscore,
       };
-
-    case QUESTIONS_TYPE_ACTIONS.Tick:
+    case ACTION_TYPE.Tick:
       return {
         ...state,
         secondsRemaining: state.secondsRemaining - 1,
         status:
-          state.secondsRemaining === 0 ? STATUS_DATA.Finished : state.status,
+          state.secondsRemaining === 0 ? STATUS_STATE.Finished : state.status,
       };
 
     default:
-      throw new Error('Action Unknown');
+      throw new Error('Unknown Action Type');
   }
 }
 
 function App() {
-  // state
   const [state, dispatch] = useReducer(quizReducer, initialState);
   const {
-    status,
     questions,
+    status,
     index,
     answer,
     points,
@@ -97,26 +94,24 @@ function App() {
   } = state;
   const numQuestions = questions.length;
   const maxPoints = questions.reduce(
-    (acc, currQuestion) => acc + currQuestion.points,
+    (points, currQ) => points + currQ.points,
     0
   );
 
   useEffect(() => {
     const abortController = new AbortController();
-
-    async function fetchQuestions() {
+    const fetchQuestions = async () => {
       try {
         const response = await fetch(QUESTIONS_URI, {
           signal: abortController.signal,
         });
         const data = await response.json();
-
-        dispatch({ type: QUESTIONS_TYPE_ACTIONS.DataReceived, payload: data });
+        dispatch({ type: ACTION_TYPE.DataReceived, payload: data });
       } catch (error) {
-        console.log(error);
-        dispatch({ type: QUESTIONS_TYPE_ACTIONS.DataFailed });
+        console.log(error.message);
+        dispatch({ type: ACTION_TYPE.DataFailed });
       }
-    }
+    };
 
     fetchQuestions();
 
@@ -125,18 +120,16 @@ function App() {
     };
   }, []);
 
-  console.log({ status, questions, answer, points, highscore });
-
   return (
     <div className='app'>
       <Header />
       <Main>
-        {status === STATUS_DATA.Loading && <Loader />}
-        {status === STATUS_DATA.Error && <Error />}
-        {status === STATUS_DATA.Ready && (
+        {status === STATUS_STATE.Loading && <Loader />}
+        {status === STATUS_STATE.Error && <Error />}
+        {status === STATUS_STATE.Ready && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === STATUS_DATA.Active && (
+        {status === STATUS_STATE.Active && (
           <>
             <Progress
               index={index}
@@ -144,7 +137,6 @@ function App() {
               points={points}
               maxPoints={maxPoints}
               answer={answer}
-              highscore={highscore}
             />
             <Question
               question={questions[index]}
@@ -152,20 +144,20 @@ function App() {
               answer={answer}
             />
             <Footer>
-              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+              <Timer secondsRemaining={secondsRemaining} dispatch={dispatch} />
               <NextButton
                 dispatch={dispatch}
                 answer={answer}
-                numQuestions={numQuestions}
                 index={index}
+                numQuestions={numQuestions}
               />
             </Footer>
           </>
         )}
-        {status === STATUS_DATA.Finished && (
-          <FinishScreen
+        {status === STATUS_STATE.Finished && (
+          <FinishedScreen
             points={points}
-            maxPossiblePoints={maxPoints}
+            maxPoints={maxPoints}
             highscore={highscore}
             dispatch={dispatch}
           />

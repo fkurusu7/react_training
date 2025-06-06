@@ -1,36 +1,32 @@
 /* eslint-disable no-unused-vars */
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useCities } from '../contexts/CitiesContext';
-import { formatDate } from '../utils/helpers';
-import ButtonBack from './ButtonBack';
-import styles from './City.module.css';
-import Spinner from './Spinner';
-
-// TEMP DATA
-/* const currentCity = {
-  cityName: 'Lisbon',
-  emoji: '🇵🇹',
-  date: '2027-10-31T15:59:59.138Z',
-  notes: 'My favorite city so far!',
-}; */
+import { useParams, useSearchParams } from 'react-router-dom';
 
 function City() {
+  // TEMP DATA
+  // const currentCity = {
+  //   cityName: 'Lisbon',
+  //   emoji: '🇵🇹',
+  //   date: '2027-10-31T15:59:59.138Z',
+  //   notes: 'My favorite city so far!',
+  // };
+
   const { id } = useParams();
-  const { currentCity, getCity, isLoadingCity } = useCities();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
 
-  useEffect(() => {
-    getCity(id);
-  }, [getCity, id]);
-
-  const { cityName, emoji, date, notes } = currentCity;
-
-  if (isLoadingCity) return <Spinner />;
-
+  // const { cityName, emoji, date, notes } = currentCity;
+  return (
+    <div>
+      <h1>city {id}</h1>
+      <h2>
+        {lat} - {lng}
+      </h2>
+    </div>
+  );
+  /* 
   return (
     <div className={styles.city}>
-      <h1>City X</h1>
-
       <div className={styles.row}>
         <h6>City name</h6>
         <h3>
@@ -65,7 +61,7 @@ function City() {
         <ButtonBack />
       </div>
     </div>
-  );
+  ); */
 }
 
 export default City;

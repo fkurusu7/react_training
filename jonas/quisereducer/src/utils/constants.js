@@ -1,12 +1,12 @@
-export const STATUS_DATA = {
+export const STATUS_STATE = Object.freeze({
   Loading: 'loading',
   Error: 'error',
   Ready: 'ready',
   Active: 'active',
   Finished: 'finished',
-};
+});
 
-export const QUESTIONS_TYPE_ACTIONS = {
+export const ACTION_TYPE = Object.freeze({
   DataReceived: 'dataReceived',
   DataFailed: 'dataFailed',
   Start: 'start',
@@ -15,4 +15,4 @@ export const QUESTIONS_TYPE_ACTIONS = {
   Finish: 'finish',
   Restart: 'restart',
   Tick: 'tick',
-};
+});
