@@ -1,54 +1,6 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
-    },
-    {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
-      "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": 17806751
-    },
-    {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
-      "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": 98443197
-    },
-    {
-      "cityName": "Feira de Santana",
-      "country": "Brazil",
-      "emoji": "🇧🇷",
-      "date": "2025-06-07T04:01:20.690Z",
-      "notes": "",
-      "position": {
-        "lat": "-12.254127737657381",
-        "lng": "-38.95751953125001"
-      },
-      "id": 98443198
-    },
-    {
       "cityName": "New York City",
       "country": "United States of America (the)",
       "emoji": "🇺🇸",
@@ -59,30 +11,6 @@
         "lng": "-73.87207031250001"
       },
       "id": 98443199
-    },
-    {
-      "cityName": "Havana",
-      "country": "Cuba",
-      "emoji": "🇨🇺",
-      "date": "2025-06-07T17:54:39.988Z",
-      "notes": "",
-      "position": {
-        "lat": "23.32208001137844",
-        "lng": "-82.44140625000001"
-      },
-      "id": 98443200
-    },
-    {
-      "cityName": "La Trinitaria",
-      "country": "Mexico",
-      "emoji": "🇲🇽",
-      "date": "2025-06-07T17:54:53.679Z",
-      "notes": "",
-      "position": {
-        "lat": "15.823966027173682",
-        "lng": "-91.94458007812501"
-      },
-      "id": 98443201
     },
     {
       "cityName": "Veracruz",
@@ -107,6 +35,114 @@
         "lng": "139.80102539062503"
       },
       "id": 98443203
+    },
+    {
+      "cityName": "Lima",
+      "country": "Peru",
+      "emoji": "🇵🇪",
+      "date": "2025-06-07T19:09:24.577Z",
+      "notes": "",
+      "position": {
+        "lat": "-12.017830337768213",
+        "lng": "-77.05810546875001"
+      },
+      "id": 98443204
+    },
+    {
+      "cityName": "Arapa",
+      "country": "Peru",
+      "emoji": "🇵🇪",
+      "date": "2025-06-07T19:09:54.907Z",
+      "notes": "",
+      "position": {
+        "lat": "-15.140404083405867",
+        "lng": "-70.11028289794923"
+      },
+      "id": 98443205
+    },
+    {
+      "cityName": "La Paz",
+      "country": "Bolivia (Plurinational State of)",
+      "emoji": "🇧🇴",
+      "date": "2025-06-07T19:10:17.249Z",
+      "notes": "",
+      "position": {
+        "lat": "-16.49551349337423",
+        "lng": "-68.13222885131837"
+      },
+      "id": 98443206
+    },
+    {
+      "cityName": "Uyuni",
+      "country": "Bolivia (Plurinational State of)",
+      "emoji": "🇧🇴",
+      "date": "2025-06-07T19:10:54.163Z",
+      "notes": "",
+      "position": {
+        "lat": "-20.478481600090554",
+        "lng": "-66.82708740234376"
+      },
+      "id": 98443207
+    },
+    {
+      "cityName": "Calama",
+      "country": "Chile",
+      "emoji": "🇨🇱",
+      "date": "2025-06-07T19:11:02.069Z",
+      "notes": "",
+      "position": {
+        "lat": "-22.46180203533398",
+        "lng": "-68.91723632812501"
+      },
+      "id": 98443208
+    },
+    {
+      "cityName": "Antofagasta",
+      "country": "Chile",
+      "emoji": "🇨🇱",
+      "date": "2025-06-07T19:11:05.693Z",
+      "notes": "",
+      "position": {
+        "lat": "-23.664650731631625",
+        "lng": "-70.30700683593751"
+      },
+      "id": 98443209
+    },
+    {
+      "cityName": "Santiago",
+      "country": "Chile",
+      "emoji": "🇨🇱",
+      "date": "2025-06-07T19:11:16.121Z",
+      "notes": "",
+      "position": {
+        "lat": "-33.44977658311845",
+        "lng": "-70.62011718750001"
+      },
+      "id": 98443210
+    },
+    {
+      "cityName": "Valparaiso",
+      "country": "Chile",
+      "emoji": "🇨🇱",
+      "date": "2025-06-07T19:11:19.587Z",
+      "notes": "",
+      "position": {
+        "lat": "-33.06392419812064",
+        "lng": "-71.58691406250001"
+      },
+      "id": 98443211
+    },
+    {
+      "cityName": "Algarrobo",
+      "country": "Chile",
+      "emoji": "🇨🇱",
+      "date": "2025-06-07T19:11:23.018Z",
+      "notes": "",
+      "position": {
+        "lat": "-33.37641235124677",
+        "lng": "-71.63085937500001"
+      },
+      "id": 98443212
     }
   ]
 }
