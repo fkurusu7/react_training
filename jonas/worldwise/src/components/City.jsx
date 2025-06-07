@@ -1,30 +1,28 @@
 /* eslint-disable no-unused-vars */
+import { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useCitiesContext } from '../contexts/CitiesContext';
+import { formatDate } from '../utils/helpers';
+import ButtonBack from './ButtonBack';
+import styles from './City.module.css';
+import Spinner from './Spinner';
 
 function City() {
-  // TEMP DATA
-  // const currentCity = {
-  //   cityName: 'Lisbon',
-  //   emoji: '🇵🇹',
-  //   date: '2027-10-31T15:59:59.138Z',
-  //   notes: 'My favorite city so far!',
-  // };
-
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
 
-  // const { cityName, emoji, date, notes } = currentCity;
-  return (
-    <div>
-      <h1>city {id}</h1>
-      <h2>
-        {lat} - {lng}
-      </h2>
-    </div>
-  );
-  /* 
+  const { currentCity, getCity, isLoading } = useCitiesContext();
+
+  useEffect(() => {
+    getCity(id);
+  }, [id, getCity]);
+
+  const { cityName, emoji, date, notes } = currentCity;
+
+  if (isLoading) return <Spinner />;
+
   return (
     <div className={styles.city}>
       <div className={styles.row}>
@@ -61,7 +59,7 @@ function City() {
         <ButtonBack />
       </div>
     </div>
-  ); */
+  );
 }
 
 export default City;

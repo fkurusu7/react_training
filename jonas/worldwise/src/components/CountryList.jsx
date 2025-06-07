@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
+import { useCitiesContext } from '../contexts/CitiesContext';
 import CountryItem from './CountryItem';
 import styles from './CountryList.module.css';
 import Message from './Message';
 import Spinner from './Spinner';
 
-function CountryList({ cities, isLoading }) {
+function CountryList() {
+  const { cities, isLoading } = useCitiesContext();
+
   if (isLoading && !cities.length) return <Spinner />;
   if (!cities.length) return <Message message='Add your first city' />;
 
-  // [
-  //  {"country": "Spain", "emoji": "🇪🇸",},
-  //  {"country": "Panama", "emoji": "🇪🇸",}
-  // ]
   const countries = cities.reduce((arr, city) => {
     if (!arr.map((c) => c.name).includes(city.country))
       return [...arr, { name: city.country, emoji: city.emoji }];

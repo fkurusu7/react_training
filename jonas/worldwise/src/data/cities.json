@@ -25,18 +25,6 @@
       "id": 17806751
     },
     {
-      "cityName": "Barcelona",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
-      "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": 17806752
-    },
-    {
       "cityName": "Berlin",
       "country": "Germany",
       "emoji": "🇩🇪",
@@ -47,6 +35,78 @@
         "lng": 13.376933665713324
       },
       "id": 98443197
+    },
+    {
+      "cityName": "Feira de Santana",
+      "country": "Brazil",
+      "emoji": "🇧🇷",
+      "date": "2025-06-07T04:01:20.690Z",
+      "notes": "",
+      "position": {
+        "lat": "-12.254127737657381",
+        "lng": "-38.95751953125001"
+      },
+      "id": 98443198
+    },
+    {
+      "cityName": "New York City",
+      "country": "United States of America (the)",
+      "emoji": "🇺🇸",
+      "date": "2025-06-07T17:54:26.296Z",
+      "notes": "",
+      "position": {
+        "lat": "40.79717741518769",
+        "lng": "-73.87207031250001"
+      },
+      "id": 98443199
+    },
+    {
+      "cityName": "Havana",
+      "country": "Cuba",
+      "emoji": "🇨🇺",
+      "date": "2025-06-07T17:54:39.988Z",
+      "notes": "",
+      "position": {
+        "lat": "23.32208001137844",
+        "lng": "-82.44140625000001"
+      },
+      "id": 98443200
+    },
+    {
+      "cityName": "La Trinitaria",
+      "country": "Mexico",
+      "emoji": "🇲🇽",
+      "date": "2025-06-07T17:54:53.679Z",
+      "notes": "",
+      "position": {
+        "lat": "15.823966027173682",
+        "lng": "-91.94458007812501"
+      },
+      "id": 98443201
+    },
+    {
+      "cityName": "Veracruz",
+      "country": "Mexico",
+      "emoji": "🇲🇽",
+      "date": "2025-06-07T17:55:11.691Z",
+      "notes": "",
+      "position": {
+        "lat": "19.186677697957833",
+        "lng": "-96.13037109375"
+      },
+      "id": 98443202
+    },
+    {
+      "cityName": "Tokyo",
+      "country": "Japan",
+      "emoji": "🇯🇵",
+      "date": "2025-06-07T18:05:47.389Z",
+      "notes": "",
+      "position": {
+        "lat": "35.65729624809628",
+        "lng": "139.80102539062503"
+      },
+      "id": 98443203
     }
   ]
 }
