@@ -79,24 +79,27 @@ function CitiesProvider({ children }) {
     fetchCities();
   }, []);
 
-  const getCity = useCallback(async function (cityId) {
-    try {
-      if (+cityId === currentCity.id) return;
+  const getCity = useCallback(
+    async function (cityId) {
+      try {
+        if (+cityId === currentCity.id) return;
 
-      dispatch({ type: ACTION_TYPES.Loading });
-      const response = await fetch(`${CITIES_URI}/${cityId}`);
-      const data = await response.json();
+        dispatch({ type: ACTION_TYPES.Loading });
+        const response = await fetch(`${CITIES_URI}/${cityId}`);
+        const data = await response.json();
 
-      dispatch({ type: ACTION_TYPES.City, payload: data });
-    } catch (error) {
-      console.error('Fetch error:', error);
-      alert(`Error: ${error.message}`);
-      dispatch({
-        type: ACTION_TYPES.Rejected,
-        payload: 'Error loading cities',
-      });
-    }
-  }, []);
+        dispatch({ type: ACTION_TYPES.City, payload: data });
+      } catch (error) {
+        console.error('Fetch error:', error);
+        alert(`Error: ${error.message}`);
+        dispatch({
+          type: ACTION_TYPES.Rejected,
+          payload: 'Error loading cities',
+        });
+      }
+    },
+    [currentCity.id]
+  );
 
   async function createCity(newCity) {
     try {

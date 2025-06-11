@@ -3,6 +3,7 @@ import CountryCapitalGame from './minis/game/country-capital/CountryCapitalGame'
 import OTPApp from './minis/otp/OTPApp';
 import Pagination from './minis/pagination/Pagination';
 import PasswordGenerator from './minis/passgen/PasswordGenerator';
+import PomodoroTimer from './minis/pomodoro/PomodoroTimer';
 import Stepper from './minis/stepper/Stepper';
 import TooltipApp from './minis/tooltip/TooltipApp';
 
@@ -53,6 +54,12 @@ const projects = [
     component: PasswordGenerator,
     description:
       'Generate a password with lowercase, uppercase letters, numbers and symbols',
+  },
+  {
+    id: `${new Date().toISOString()} + ${crypto.randomUUID()}`,
+    name: 'Pomodoro Timer',
+    component: PomodoroTimer,
+    description: 'Simple Pomodoro Timer',
   },
 ];
 
