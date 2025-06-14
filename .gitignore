@@ -20,6 +20,10 @@ jonas/quisereducer/node_modules
 jonas/quisereducer/dist
 jonas/worldwise/node_modules
 jonas/worldwise/dist
+jonas/wildoasis/ui/node_modules
+jonas/wildoasis/ui/dist
+jonas/wildoasis/api/node_modules
+jonas/wildoasis/api/dist
 typescript-tutorial/node_modules
 typescript-tutorial/dist
 proshop/ui/node_modules
