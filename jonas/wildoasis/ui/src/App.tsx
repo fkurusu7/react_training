@@ -1,60 +1,34 @@
-import styled from 'styled-components';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Account from './pages/Account';
+import Bookings from './pages/Bookings';
+import Cabins from './pages/Cabins';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import PageNotFound from './pages/PageNotFound';
+import Settings from './pages/Settings';
+import NewUsers from './pages/Users';
 import GlobalStyles from './styles/GlobalStyles';
-import Button from './ui/Button';
-import Heading from './ui/Heading';
-import Input from './ui/Input';
-import Row from './ui/Row';
-
-const StyledApp = styled.div`
-  background-color: red;
-  padding: 20px;
-`;
+import AppLayout from './ui/AppLayout';
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <StyledApp>
-        <Row>
-          <Row type='horizontal'>
-            <Heading as='h1'>The Wild Oasis</Heading>
-            <div>
-              <Heading as='h3'>Checccck</Heading>
-
-              <Input
-                type='number'
-                placeholder='# Guests'
-                id='testnum'
-                name='testnum'
-              />
-              <Button size='small' variation='danger'>
-                dsds
-              </Button>
-            </div>
-          </Row>
-
-          <Row type='vertical'>
-            <Heading as='h3'>Form</Heading>
-            <form>
-              <Input
-                type='text'
-                placeholder='Testing Row'
-                id='testtext1'
-                name='testtext1'
-              />
-              <Input
-                type='text'
-                placeholder='Testing Row'
-                id='testtext2'
-                name='testtext2'
-              />
-              <Button size='large' variation='primary'>
-                dsds
-              </Button>
-            </form>
-          </Row>
-        </Row>
-      </StyledApp>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate replace to='dashboard' />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='cabins' element={<Cabins />} />
+            <Route path='bookings' element={<Bookings />} />
+            <Route path='newusers' element={<NewUsers />} />
+            <Route path='settings' element={<Settings />} />
+            <Route path='account' element={<Account />} />
+          </Route>
+          <Route path='login' element={<Login />} />
+          <Route path='*' element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
