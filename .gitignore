@@ -23,6 +23,7 @@ jonas/worldwise/dist
 jonas/wildoasis/ui/node_modules
 jonas/wildoasis/ui/dist
 jonas/wildoasis/api/node_modules
+jonas/wildoasis/api/.env*
 jonas/wildoasis/api/dist
 typescript-tutorial/node_modules
 typescript-tutorial/dist
