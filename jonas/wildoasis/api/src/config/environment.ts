@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
+import logger from './logger';
 
-config({ path: `.env.{process.env.NODE_ENV} || 'development'` });
+config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 
 const {
   PORT,
@@ -13,12 +14,13 @@ const {
   JWT_SECRET,
 } = process.env;
 
+console.log();
 const nodeEnv =
   NODE_ENV ||
   (() => {
-    console.warn('NODE_ENV not set, defaulting to development');
+    logger.warn('NODE_ENV not set, defaulting to development');
     return 'development';
-  });
+  })();
 
 interface ServerConfig {
   port: number;
