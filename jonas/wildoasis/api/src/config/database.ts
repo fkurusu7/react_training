@@ -18,7 +18,6 @@ const database: DatabaseConfig = {
     };
 
     try {
-      console.log(configApp.mongo);
       // connect to DB
       await mongoose.connect(configApp.mongo.uri, options);
       logger.success('Connected to MongoDB');
