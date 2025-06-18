@@ -1,3 +1,7 @@
+/**
+ * API Responses (success and error)
+ */
+
 interface APIResponse<T> {
   message?: string;
   success: boolean;
