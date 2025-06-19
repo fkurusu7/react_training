@@ -1,12 +1,12 @@
 import { Request, Response } from 'express-serve-static-core';
-import configApp from '../../config/environment';
-import logger from '../../config/logger';
-import { successResponse } from '../../types/api.type';
+import configApp from '../config/environment';
+import logger from '../config/logger';
+import Cabin from '../models/cabins.model';
+import { successResponse } from '../types/api.type';
 import {
   CreateCabinRequestWithBody,
   createCabinSchema,
-} from '../../types/cabins.type';
-import Cabin from '../cabins.model';
+} from '../types/cabins.type';
 
 // /api/cabins/:id
 export async function getCabin(req: Request, res: Response): Promise<void> {

@@ -1,12 +1,15 @@
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import logger from './config/logger';
+import { createCorsOptions } from './middlewares/cors.middleware';
 import { errorHandler, notFound } from './middlewares/error.middleware';
 import router from './routes/routes';
 
 export function createApp() {
   const app = express();
 
+  app.use(cors(createCorsOptions()));
   app.use(express.json());
   app.use(cookieParser());
 

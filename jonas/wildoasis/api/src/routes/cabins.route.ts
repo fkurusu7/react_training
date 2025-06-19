@@ -1,9 +1,5 @@
 import express from 'express';
-import {
-  createCabin,
-  getCabin,
-  getCabins,
-} from '../models/handlers/cabins.handler';
+import { createCabin, getCabin, getCabins } from '../handlers/cabins.handler';
 
 const router = express.Router();
 
