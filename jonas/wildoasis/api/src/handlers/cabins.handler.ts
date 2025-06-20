@@ -8,7 +8,14 @@ import {
   createCabinSchema,
 } from '../types/cabins.type';
 
-// /api/cabins/:id
+/**
+ * Get a Cabin data
+ * GET /api/cabins/:id
+ * @param req - Request
+ * @param res - Response
+ * @returns successResponse
+ * @throws error
+ */
 export async function getCabin(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
@@ -32,7 +39,14 @@ export async function getCabin(req: Request, res: Response): Promise<void> {
   }
 }
 
-// /api/cabins
+/**
+ * Get Cabins data
+ * GET /api/cabins
+ * @param req - Request
+ * @param res - Response
+ * @returns successResponse
+ * @throws error
+ */
 export async function getCabins(req: Request, res: Response): Promise<void> {
   // Query modifiers - For Pagination
   const startIndex = parseInt(req.query.startIndex as string) || 0;
@@ -67,7 +81,9 @@ export async function getCabins(req: Request, res: Response): Promise<void> {
  * Creates Cabin data
  * POST /api/cabins
  * @param req - createCabinSchema
- * @param res - successResponse
+ * @param res - Response
+ * @returns successResponse
+ * @throws error
  */
 export async function createCabin(
   req: CreateCabinRequestWithBody,
@@ -91,7 +107,27 @@ export async function createCabin(
       .status(201)
       .send(successResponse(savedCabin, 'Cabin created successfully'));
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) logger.error('Error creating a Cabin: ', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a Cabin by Id
+ * DELETE /api/cabins/:id
+ * @param req - Request
+ * @param res - Response
+ * @returns successResponse
+ * @throws error
+ */
+export async function deleteCabin(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const cabin = await Cabin.findByIdAndDelete(id);
+    logger.warn(JSON.stringify(cabin));
+    res.sendStatus(204);
+  } catch (error) {
+    if (error instanceof Error) logger.error('Error deleting a Cabin: ', error);
     throw error;
   }
 }
