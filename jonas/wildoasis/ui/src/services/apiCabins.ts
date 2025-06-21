@@ -1,4 +1,4 @@
-import type { CabinResponse } from '../types/cabin.type';
+import type { CabinFormData, CabinResponse } from '../types/cabin.type';
 
 const CABINS_URI = '/api/cabins';
 
@@ -17,6 +17,29 @@ export async function getCabins(): Promise<CabinResponse> {
       throw error;
     }
     // Handle non-Error objects
+    throw new Error('An unknown error occurred');
+  }
+}
+
+export async function createCabin(cabin: CabinFormData) {
+  try {
+    const response = await fetch(CABINS_URI, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cabin),
+    });
+
+    if (!response.ok) {
+      throw new Error('Cabin could not be created');
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
     throw new Error('An unknown error occurred');
   }
 }

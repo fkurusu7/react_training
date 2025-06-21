@@ -1,10 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import Input from "../../ui/Input";
-import Form from "../../ui/Form";
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Textarea from "../../ui/Textarea";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { createCabin } from '../../services/apiCabins';
+import type { CabinFormData } from '../../types/cabin.type';
+import Button from '../../ui/Button';
+import FileInput from '../../ui/FileInput';
+import Form from '../../ui/Form';
+import Input from '../../ui/Input';
+import Textarea from '../../ui/Textarea';
 
 const FormRow = styled.div`
   display: grid;
@@ -36,51 +41,86 @@ const FormRow = styled.div`
 const Label = styled.label`
   font-weight: 500;
 `;
-
+/* 
 const Error = styled.span`
   font-size: 1.4rem;
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
+ */ function CreateCabinForm() {
+  const { register, handleSubmit, reset } = useForm<CabinFormData>();
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createCabin,
+    onSuccess: () => {
+      toast.success('New Cabin created');
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  function onSubmit(data: CabinFormData, ev?: React.BaseSyntheticEvent) {
+    ev?.preventDefault();
+    mutate(data);
+  }
+
+  // const onSubmit: SubmitHandler<CabinFormData> = (data, event) => {
+  //   event?.preventDefault(); // Optional chaining since event might be undefined
+  //   console.log('Data', data);
+  // };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
+        <Label htmlFor='name'>Cabin name</Label>
+        <Input type='text' id='name' {...register('name')} />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
+        <Label htmlFor='maxCapacity'>Maximum capacity</Label>
+        <Input type='number' id='maxCapacity' {...register('maxCapacity')} />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
+        <Label htmlFor='regularPrice'>Regular price</Label>
+        <Input type='number' id='regularPrice' {...register('regularPrice')} />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
+        <Label htmlFor='discount'>Discount</Label>
+        <Input
+          type='number'
+          id='discount'
+          defaultValue={0}
+          {...register('discount')}
+        />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
+        <Label htmlFor='description'>Description for website</Label>
+        <Textarea
+          id='description'
+          defaultValue=''
+          {...register('description')}
+        />
       </FormRow>
 
       <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+        <Label htmlFor='image'>Cabin photo</Label>
+        <FileInput id='image' accept='image/*' />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation='secondary' type='reset'>
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button type='submit' disabled={isPending}>
+          Add cabin
+        </Button>
       </FormRow>
     </Form>
   );

@@ -4,6 +4,15 @@ export interface CabinResponse {
   message: string;
 }
 
+export interface CabinFormData {
+  name: string;
+  description: string;
+  image: string;
+  maxCapacity: number;
+  regularPrice: number;
+  discount: number;
+}
+
 export interface Cabin {
   _id: string;
   name: string;
