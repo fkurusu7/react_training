@@ -1,6 +1,13 @@
-import { Request, Response } from 'express-serve-static-core';
+import console from 'console';
+import { NextFunction, Request, Response } from 'express-serve-static-core';
+import { MongooseError } from 'mongoose';
+import { z } from 'zod';
 import configApp from '../config/environment';
 import logger from '../config/logger';
+import {
+  handleMongoDBError,
+  handleZodError,
+} from '../middlewares/error.middleware';
 import Cabin from '../models/cabins.model';
 import { successResponse } from '../types/api.type';
 import {
@@ -16,7 +23,11 @@ import {
  * @returns successResponse
  * @throws error
  */
-export async function getCabin(req: Request, res: Response): Promise<void> {
+export async function getCabin(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const { id } = req.params;
     const cabin = await Cabin.findById({ _id: id });
@@ -35,7 +46,7 @@ export async function getCabin(req: Request, res: Response): Promise<void> {
       logger.error('Error fetching products', error);
     }
 
-    throw error;
+    next(error);
   }
 }
 
@@ -47,7 +58,11 @@ export async function getCabin(req: Request, res: Response): Promise<void> {
  * @returns successResponse
  * @throws error
  */
-export async function getCabins(req: Request, res: Response): Promise<void> {
+export async function getCabins(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   // Query modifiers - For Pagination
   const startIndex = parseInt(req.query.startIndex as string) || 0;
   const limit = parseInt(req.query.limit as string) || 10;
@@ -72,7 +87,7 @@ export async function getCabins(req: Request, res: Response): Promise<void> {
     if (configApp.server.nodeEnv === 'development' && error instanceof Error) {
       logger.error('Error fetching Products', error);
     }
-    throw error;
+    next(error);
     // throw new Error('Error fetching Resources');
   }
 }
@@ -87,7 +102,8 @@ export async function getCabins(req: Request, res: Response): Promise<void> {
  */
 export async function createCabin(
   req: CreateCabinRequestWithBody,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const body = createCabinSchema.parse(req.body);
@@ -95,10 +111,10 @@ export async function createCabin(
     const cabin = new Cabin({
       name: body.name,
       description: body.description,
-      discount: body.discount,
       image: body.image,
-      maxCapacity: body.maxCapacity,
-      regularPrice: body.regularPrice,
+      maxCapacity: Number(body.maxCapacity),
+      regularPrice: Number(body.regularPrice),
+      discount: Number(body.discount),
     });
 
     const savedCabin = await cabin.save();
@@ -107,8 +123,18 @@ export async function createCabin(
       .status(201)
       .send(successResponse(savedCabin, 'Cabin created successfully'));
   } catch (error) {
-    if (error instanceof Error) logger.error('Error creating a Cabin: ', error);
-    throw error;
+    if (configApp.server.nodeEnv === 'development' && error instanceof Error) {
+      logger.error('HANDLED: Error creating a Cabin: ', error);
+    }
+
+    if (error instanceof z.ZodError) {
+      console.log('zod');
+      next(handleZodError(error, res));
+    } else if (error instanceof MongooseError) {
+      next(handleMongoDBError(error, res));
+    } else {
+      next(error);
+    }
   }
 }
 
@@ -120,7 +146,11 @@ export async function createCabin(
  * @returns successResponse
  * @throws error
  */
-export async function deleteCabin(req: Request, res: Response) {
+export async function deleteCabin(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { id } = req.params;
     const cabin = await Cabin.findByIdAndDelete(id);
@@ -128,6 +158,7 @@ export async function deleteCabin(req: Request, res: Response) {
     res.sendStatus(204);
   } catch (error) {
     if (error instanceof Error) logger.error('Error deleting a Cabin: ', error);
-    throw error;
+    res.statusCode = 400;
+    next(error);
   }
 }

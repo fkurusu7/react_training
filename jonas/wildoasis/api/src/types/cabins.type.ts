@@ -5,10 +5,10 @@ import { z } from 'zod';
 export const createCabinSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
-  image: z.string(),
-  maxCapacity: z.number().positive(),
-  regularPrice: z.number().positive(),
-  discount: z.number().min(0),
+  image: z.string().optional(),
+  maxCapacity: z.coerce.number().positive(),
+  regularPrice: z.coerce.number().positive(),
+  discount: z.coerce.number().min(0),
 });
 
 type CreateCabinRequest = z.infer<typeof createCabinSchema>;
