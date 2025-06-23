@@ -3,6 +3,7 @@ import { Request, Response } from 'express-serve-static-core';
 import database from '../config/database';
 import { successResponse } from '../types/api.type';
 import cabinsRouter from './cabins.route';
+import filesRouter from './files.route';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.get('/health', (req: Request, res: Response) => {
 });
 
 router.use('/api/cabins', cabinsRouter);
+router.use('/api/files', filesRouter);
 
 export default router;

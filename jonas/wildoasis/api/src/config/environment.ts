@@ -12,6 +12,9 @@ const {
   JWT_COOKIE_NAME,
   JWT_EXPIRES_IN,
   JWT_SECRET,
+  AWS_ACCESS_KEY,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_BUCKET_NAME,
 } = process.env;
 
 console.log();
@@ -39,10 +42,17 @@ interface MongoConfig {
   dbName: string;
 }
 
+interface AWSS3Config {
+  accessKey: string;
+  secretAccessKey: string;
+  bucketName: string;
+}
+
 interface ConfigInterface {
   server: ServerConfig;
   jwt: JwtConfig;
   mongo: MongoConfig;
+  aws: AWSS3Config;
 }
 
 /**
@@ -73,7 +83,14 @@ const configApp: ConfigInterface = {
     dbName: MONGO_DB_NAME || 'test',
     uri: MONGODB_URI!,
   },
+
+  // AWS settings
+  aws: {
+    accessKey: AWS_ACCESS_KEY!,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY!,
+    bucketName: AWS_BUCKET_NAME!,
+  },
 };
 
-export const { server, jwt, mongo } = configApp;
+export const { server, jwt, mongo, aws } = configApp;
 export default configApp;

@@ -23,14 +23,23 @@ export async function getCabins(): Promise<CabinResponse> {
 
 export async function createCabin(cabin: CabinFormData) {
   try {
+    // TODO:  Get image URL from S3 and upload it
+    // const imageURL = API call function
+    // if there was an error uploading the image, remove the image URL from S3
+    // and return error message
+    // const newCabin = {...cabin, image: imageURL}
+
     const response = await fetch(CABINS_URI, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cabin),
+      // body: JSON.stringify(newCabin),
     });
 
     if (!response.ok) {
       throw new Error('Cabin could not be created');
+
+      // TODO: remove image from S3 if there was an error creating the cabin object
     }
 
     const data = await response.json();

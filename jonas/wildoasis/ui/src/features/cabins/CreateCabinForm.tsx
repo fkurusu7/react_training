@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { createCabin } from '../../services/apiCabins';
 import type { CabinFormData } from '../../types/cabin.type';
 import Button from '../../ui/Button';
+import FileInput from '../../ui/FileInput';
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
@@ -32,7 +33,9 @@ function CreateCabinForm() {
   // };
   function onSubmit(data: CabinFormData, ev?: React.BaseSyntheticEvent) {
     ev?.preventDefault();
-    mutate(data);
+    console.log('Data: ', data);
+    console.log('image', data.image[0]);
+    // mutate({ ...data, image: data.image[0] });
   }
 
   function onError(errors: FieldErrors<CabinFormData>) {
@@ -102,12 +105,14 @@ function CreateCabinForm() {
           })}
         />
       </FormRow>
-      {/* 
-      <FormRow>
-        <Label htmlFor='image'>Cabin photo</Label>
-        <FileInput id='image' accept='image/*' />
+
+      <FormRow label='Cabin photo' id='image'>
+        <FileInput
+          id='image'
+          accept='image/*'
+          {...register('image', { required: 'This field is required' })}
+        />
       </FormRow>
-      */}
 
       <FormRow>
         <>
