@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { createCabin } from '../../services/apiCabins';
+import { uploadImageToS3AWS } from '../../services/apiS3';
 import type { CabinFormData } from '../../types/cabin.type';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
@@ -27,15 +28,11 @@ function CreateCabinForm() {
     onError: (err) => toast.error(err.message),
   });
 
-  // const onSubmit: SubmitHandler<CabinFormData> = (data, event) => {
-  //   event?.preventDefault(); // Optional chaining since event might be undefined
-  //   console.log('Data', data);
-  // };
-  function onSubmit(data: CabinFormData, ev?: React.BaseSyntheticEvent) {
+  async function onSubmit(data: CabinFormData, ev?: React.BaseSyntheticEvent) {
     ev?.preventDefault();
-    console.log('Data: ', data);
-    console.log('image', data.image[0]);
-    // mutate({ ...data, image: data.image[0] });
+    const imageFile = data.image[0] as unknown as File;
+    const imageSrc = await uploadImageToS3AWS(imageFile);
+    mutate({ ...data, image: imageSrc });
   }
 
   function onError(errors: FieldErrors<CabinFormData>) {

@@ -15,6 +15,7 @@ const {
   AWS_ACCESS_KEY,
   AWS_SECRET_ACCESS_KEY,
   AWS_BUCKET_NAME,
+  AWS_BUCKET_REGION,
 } = process.env;
 
 console.log();
@@ -46,6 +47,7 @@ interface AWSS3Config {
   accessKey: string;
   secretAccessKey: string;
   bucketName: string;
+  bucketRegion: string;
 }
 
 interface ConfigInterface {
@@ -89,6 +91,7 @@ const configApp: ConfigInterface = {
     accessKey: AWS_ACCESS_KEY!,
     secretAccessKey: AWS_SECRET_ACCESS_KEY!,
     bucketName: AWS_BUCKET_NAME!,
+    bucketRegion: AWS_BUCKET_REGION!,
   },
 };
 

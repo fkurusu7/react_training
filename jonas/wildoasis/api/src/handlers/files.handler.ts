@@ -7,7 +7,7 @@ import { successResponse } from '../types/api.type';
 // Get banner image URL from AWS S3
 function getS3Client(): S3Client {
   return new S3Client({
-    region: 'us-east-2',
+    region: configApp.aws.bucketRegion,
     credentials: {
       accessKeyId: configApp.aws.accessKey,
       secretAccessKey: configApp.aws.secretAccessKey,
