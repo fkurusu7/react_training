@@ -14,11 +14,11 @@ export async function uploadImageToS3AWS(image: File) {
   }
 
   if (image.size > maxSize || image.size < minSize) {
-    throw new Error('Image must be between 1KB and 5MB');
+    throw new Error('Image must be between 1KB and 50MB');
   }
 
   // Fetch S3 AWS URL to upload image from frontend
-  const response = await fetch(`${FILES_URI}`);
+  const response = await fetch(`${FILES_URI}/getImageUploadURL`);
   if (!response.ok) {
     throw new Error('Failed to get upload URL');
   }
@@ -45,4 +45,23 @@ export async function uploadImageToS3AWS(image: File) {
   console.log(`Public AWS URL: ${publicURL}`);
 
   return publicURL;
+}
+
+export async function deleteImageFromS3(imageUrl: string) {
+  try {
+    const response = await fetch(`${FILES_URI}/deleteImage`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(imageUrl),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete image from S3');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting image from S3:', error);
+    throw error;
+  }
 }

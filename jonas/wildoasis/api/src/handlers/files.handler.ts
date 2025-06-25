@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { NextFunction, Request, Response } from 'express-serve-static-core';
 import configApp from '../config/environment';
@@ -45,6 +49,40 @@ export async function getImageUploadURL(
       .send(
         successResponse(urlUploadImage, 'Image upload URL created successfully')
       );
+  } catch (error) {
+    if (error instanceof Error) next(error);
+  }
+}
+
+export async function deleteS3Image(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { imageUrl } = req.body;
+
+    if (!imageUrl) {
+      res.statusCode = 400;
+      throw new Error('Image URL is required');
+    }
+
+    // Extract key from URL by removing the leading slash from pathname
+    const url = new URL(imageUrl);
+
+    const imageKey = url.pathname.substring(1);
+
+    // delete image from S3
+    const s3Client = getS3Client();
+
+    const command = new DeleteObjectCommand({
+      Bucket: configApp.aws.bucketName,
+      Key: imageKey,
+    });
+
+    await s3Client.send(command);
+
+    res.status(204).send(successResponse(null, 'Image deleted successfully'));
   } catch (error) {
     if (error instanceof Error) next(error);
   }
