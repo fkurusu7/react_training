@@ -1,5 +1,6 @@
 import type { CabinFormData, CabinResponse } from '../types/cabin.type';
 import { CABINS_URI } from '../types/constants';
+import { deleteImageFromS3 } from './apiS3';
 
 export async function getCabins(): Promise<CabinResponse> {
   try {
@@ -29,7 +30,13 @@ export async function createCabin(cabin: CabinFormData) {
     });
 
     if (!response.ok) {
-      // TODO: remove image from S3 if there was an error creating the cabin object
+      if (cabin.image && typeof cabin.image === 'string') {
+        try {
+          await deleteImageFromS3(cabin.image);
+        } catch (error) {
+          console.log('error deleting image', error);
+        }
+      }
       throw new Error('Cabin could not be created');
     }
 
