@@ -21,23 +21,26 @@ export async function getCabins(): Promise<CabinResponse> {
   }
 }
 
-export async function createCabin(cabin: CabinFormData) {
+export async function createEditCabin(cabin: CabinFormData, id: string = '') {
   try {
-    const response = await fetch(CABINS_URI, {
-      method: 'POST',
+    const FETCH_METHOD = !id ? 'POST' : 'PUT';
+    const FETCH_URI = !id ? CABINS_URI : `${CABINS_URI}/${id}`;
+
+    const response = await fetch(FETCH_URI, {
+      method: FETCH_METHOD,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cabin),
     });
 
     if (!response.ok) {
-      if (cabin.image && typeof cabin.image === 'string') {
+      if (!id && cabin.image && typeof cabin.image === 'string') {
         try {
           await deleteImageFromS3(cabin.image);
         } catch (error) {
           console.log('error deleting image', error);
         }
       }
-      throw new Error('Cabin could not be created');
+      throw new Error(`Cabin could not be ${!id ? 'created' : 'updated'}`);
     }
 
     const data = await response.json();
@@ -64,6 +67,7 @@ export async function deleteCabin(id: string) {
       );
     }
 
+    // TODO: delete image from AWS-S3 once the cabin has been deleted
     return response;
   } catch (error) {
     if (error instanceof Error) {

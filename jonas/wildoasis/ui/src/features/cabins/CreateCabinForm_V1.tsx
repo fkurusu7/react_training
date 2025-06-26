@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { createEditCabin } from '../../services/apiCabins';
+import { createCabin } from '../../services/apiCabins';
 import { uploadImageToS3AWS } from '../../services/apiS3';
-import type { Cabin, CabinFormData } from '../../types/cabin.type';
+import type { CabinFormData } from '../../types/cabin.type';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Form from '../../ui/Form';
@@ -11,20 +11,15 @@ import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
 import Textarea from '../../ui/Textarea';
 
-function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
-  const { _id: editId, ...editValues } = cabinToEdit || {};
-  const isEditSession = Boolean(editId);
-
+function CreateCabinForm_V1() {
   const { register, handleSubmit, reset, getValues, formState } =
-    useForm<CabinFormData>({
-      defaultValues: isEditSession ? editValues : {},
-    });
+    useForm<CabinFormData>();
   const { errors } = formState;
 
   const queryClient = useQueryClient();
 
-  const { mutate: createCabin, isPending: isCreating } = useMutation({
-    mutationFn: createEditCabin,
+  const { mutate, isPending } = useMutation({
+    mutationFn: createCabin,
     onSuccess: () => {
       toast.success('New Cabin created');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
@@ -33,36 +28,12 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
     onError: (err) => toast.error(err.message),
   });
 
-  const { mutate: editCabin, isPending: isEditing } = useMutation({
-    mutationFn: ({
-      newCabinData,
-      id,
-    }: {
-      newCabinData: CabinFormData;
-      id: string;
-    }) => createEditCabin(newCabinData, id),
-    onSuccess: () => {
-      toast.success('Cabin updated');
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const isWorking = isCreating || isEditing;
-
   async function onSubmit(data: CabinFormData, ev?: React.BaseSyntheticEvent) {
     ev?.preventDefault();
     try {
-      if (isEditSession && editId) {
-        editCabin({ newCabinData: data, id: editId });
-      } else {
-        if (!data.image) throw new Error('Cabin Image not selected');
-
-        const imageFile = data.image[0] as unknown as File;
-        const imageSrc = await uploadImageToS3AWS(imageFile);
-        createCabin({ ...data, image: imageSrc });
-      }
+      const imageFile = data.image[0] as unknown as File;
+      const imageSrc = await uploadImageToS3AWS(imageFile);
+      mutate({ ...data, image: imageSrc });
     } catch (error) {
       console.log('error', error);
       return;
@@ -141,9 +112,7 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
         <FileInput
           id='image'
           accept='image/*'
-          {...register('image', {
-            required: isEditSession ? false : 'This field is required',
-          })}
+          {...register('image', { required: 'This field is required' })}
         />
       </FormRow>
 
@@ -154,8 +123,8 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
           <Button variation='secondary' type='reset'>
             Cancel
           </Button>
-          <Button type='submit' disabled={isWorking}>
-            {isEditSession ? 'Edit cabin' : 'Create new cabin'}
+          <Button type='submit' disabled={isPending}>
+            Add cabin
           </Button>
         </>
       </FormRow>
@@ -163,4 +132,4 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
   );
 }
 
-export default CreateCabinForm;
+export default CreateCabinForm_V1;
