@@ -49,17 +49,19 @@ export async function uploadImageToS3AWS(image: File) {
 
 export async function deleteImageFromS3(imageUrl: string) {
   try {
+    console.log('imageUrl to send to the API:', imageUrl);
     const response = await fetch(`${FILES_URI}/deleteImage`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(imageUrl),
+      body: JSON.stringify({ imageUrl: imageUrl }),
     });
 
     if (!response.ok) {
+      console.log('ERROR:::::');
       throw new Error('Failed to delete image from S3');
     }
 
-    return await response.json();
+    return true;
   } catch (error) {
     console.error('Error deleting image from S3:', error);
     throw error;

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { getCabins } from '../../services/apiCabins';
@@ -47,9 +46,12 @@ function CabinTable() {
         <div>Discount</div>
         <div></div>
       </TableHeader>
-      {cabins?.data.map((cabin) => (
-        <CabinRow key={cabin._id} cabin={cabin} />
-      ))}
+
+      {!cabins?.data?.length ? (
+        <p>No Cabins, add one!</p>
+      ) : (
+        cabins?.data?.map((cabin) => <CabinRow key={cabin._id} cabin={cabin} />)
+      )}
     </Table>
   );
 }

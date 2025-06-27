@@ -52,7 +52,7 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
   const queryClient = useQueryClient();
 
   const { isPending, mutate } = useMutation({
-    mutationFn: deleteCabin,
+    mutationFn: (cabin: Cabin) => deleteCabin(cabin),
     onSuccess: () => {
       toast.success('Cabin deleted');
       queryClient.invalidateQueries({
@@ -62,17 +62,19 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
     onError: (err) => toast.error(err.message),
   });
 
+  const imageSrc = !cabin.image ? undefined : cabin.image;
+
   return (
     <>
       <TableRow role='row'>
-        <Img src={cabin.image} alt={cabin.name} />
+        <Img src={imageSrc} alt={cabin.name} />
         <Cabin>{cabin.name}</Cabin>
         <div>{cabin.maxCapacity} guests</div>
         <Price>{formatCurrency(cabin.regularPrice)}</Price>
         <Discount>{cabin.discount} %</Discount>
         <div>
           <button onClick={() => setShowForm((show) => !show)}>Edit</button>
-          <button onClick={() => mutate(cabin._id)} disabled={isPending}>
+          <button onClick={() => mutate(cabin)} disabled={isPending}>
             {isPending ? <SpinnerMini /> : 'delete'}
           </button>
         </div>

@@ -1,18 +1,19 @@
-import type { CabinFormData, CabinResponse } from '../types/cabin.type';
+import type { Cabin, CabinFormData, CabinResponse } from '../types/cabin.type';
 import { CABINS_URI } from '../types/constants';
 import { deleteImageFromS3 } from './apiS3';
 
 export async function getCabins(): Promise<CabinResponse> {
   try {
     const response = await fetch(CABINS_URI);
-    const data = await response.json();
 
-    if (!response.ok) {
+    if (!response.ok && response.status !== 404) {
       throw new Error('Cabins could no be loaded');
     }
 
+    const data = await response.json();
     return data;
   } catch (error) {
+    console.log('error:::::\n', error);
     if (error instanceof Error) {
       throw error;
     }
@@ -54,8 +55,8 @@ export async function createEditCabin(cabin: CabinFormData, id: string = '') {
   }
 }
 
-export async function deleteCabin(id: string) {
-  console.log('ID delete:', id);
+export async function deleteCabin(cabin: Cabin) {
+  const id = cabin._id;
   try {
     const response = await fetch(`${CABINS_URI}/${id}`, {
       method: 'DELETE',
@@ -67,7 +68,10 @@ export async function deleteCabin(id: string) {
       );
     }
 
-    // TODO: delete image from AWS-S3 once the cabin has been deleted
+    if (cabin.image) {
+      console.log('Image delete:', cabin.image);
+      await deleteImageFromS3(cabin.image);
+    }
     return response;
   } catch (error) {
     if (error instanceof Error) {

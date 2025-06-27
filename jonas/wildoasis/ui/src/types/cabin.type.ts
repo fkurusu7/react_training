@@ -1,6 +1,6 @@
 export interface CabinResponse {
   success: boolean;
-  data: Cabin[];
+  data: Cabin[] | undefined;
   message: string;
 }
 

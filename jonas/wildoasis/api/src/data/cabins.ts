@@ -2,7 +2,7 @@ const cabins = [
   {
     name: '001',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -10,7 +10,7 @@ const cabins = [
   {
     name: '002',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -18,7 +18,7 @@ const cabins = [
   {
     name: '003',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -26,7 +26,7 @@ const cabins = [
   {
     name: '004',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -34,7 +34,7 @@ const cabins = [
   {
     name: '005',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -42,7 +42,7 @@ const cabins = [
   {
     name: '006',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -50,7 +50,7 @@ const cabins = [
   {
     name: '007',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -58,7 +58,7 @@ const cabins = [
   {
     name: '008',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -66,7 +66,7 @@ const cabins = [
   {
     name: '009',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -74,7 +74,7 @@ const cabins = [
   {
     name: '010',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
@@ -82,7 +82,7 @@ const cabins = [
   {
     name: '011',
     description: 'luxory cabin',
-    image: 'url to image',
+    image: '',
     maxCapacity: 8,
     regularPrice: 350,
     discount: 5,
