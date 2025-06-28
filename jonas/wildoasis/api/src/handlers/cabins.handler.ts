@@ -13,6 +13,8 @@ import { successResponse } from '../types/api.type';
 import {
   CreateCabinRequestWithBody,
   createCabinSchema,
+  EditCabinRequestWithBody,
+  editCabinSchema,
 } from '../types/cabins.type';
 
 /**
@@ -160,5 +162,50 @@ export async function deleteCabin(
     if (error instanceof Error) logger.error('Error deleting a Cabin: ', error);
     res.statusCode = 400;
     next(error);
+  }
+}
+
+/**
+ * Update a Cabin
+ * PUT /api/cabins/:id
+ * @param req - Request
+ * @param res - Response
+ * @returns successResponse
+ * @throws error
+ */
+export async function updateCabin(
+  req: EditCabinRequestWithBody,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { name, description, discount, image, maxCapacity, regularPrice } =
+      editCabinSchema.partial().parse(req.body);
+
+    const updateQuery = {
+      ...(name && { name }),
+      ...(description && { description }),
+      ...(discount && { discount }),
+      ...(image && { image }),
+      ...(maxCapacity && { maxCapacity }),
+      ...(regularPrice && { regularPrice }),
+    };
+    logger.warn(JSON.stringify(updateQuery));
+    const cabinUpdated = await Cabin.findByIdAndUpdate(id, updateQuery, {
+      new: true,
+    });
+
+    res
+      .status(200)
+      .send(successResponse(cabinUpdated, 'Cabin updated successfully'));
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      next(handleZodError(error, res));
+    } else if (error instanceof MongooseError) {
+      next(handleMongoDBError(error, res));
+    } else {
+      next(error);
+    }
   }
 }

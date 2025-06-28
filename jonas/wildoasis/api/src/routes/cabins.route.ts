@@ -4,13 +4,15 @@ import {
   deleteCabin,
   getCabin,
   getCabins,
+  updateCabin,
 } from '../handlers/cabins.handler';
 
 const router = express.Router();
 
-router.get('/:id', getCabin);
 router.get('/', getCabins);
 router.post('/', createCabin);
+router.get('/:id', getCabin);
 router.delete('/:id', deleteCabin);
+router.put('/:id', updateCabin);
 
 export default router;
