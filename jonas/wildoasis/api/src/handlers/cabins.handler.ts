@@ -156,7 +156,7 @@ export async function deleteCabin(
   try {
     const { id } = req.params;
     const cabin = await Cabin.findByIdAndDelete(id);
-    logger.warn(JSON.stringify(cabin));
+    // logger.warn(JSON.stringify(cabin));
     res.sendStatus(204);
   } catch (error) {
     if (error instanceof Error) logger.error('Error deleting a Cabin: ', error);
@@ -191,7 +191,7 @@ export async function updateCabin(
       ...(maxCapacity && { maxCapacity }),
       ...(regularPrice && { regularPrice }),
     };
-    logger.warn(JSON.stringify(updateQuery));
+    // logger.warn(JSON.stringify(updateQuery));
     const cabinUpdated = await Cabin.findByIdAndUpdate(id, updateQuery, {
       new: true,
     });

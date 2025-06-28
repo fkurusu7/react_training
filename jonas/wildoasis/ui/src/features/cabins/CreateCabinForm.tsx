@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { createEditCabin } from '../../services/apiCabins';
-import { uploadImageToS3AWS } from '../../services/apiS3';
+import { deleteImageFromS3, uploadImageToS3AWS } from '../../services/apiS3';
 import type { Cabin, CabinFormData } from '../../types/cabin.type';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
@@ -14,6 +14,7 @@ import Textarea from '../../ui/Textarea';
 function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
   const { _id: editId, ...editValues } = cabinToEdit || {};
   const isEditSession = Boolean(editId);
+  const prevImage = isEditSession ? cabinToEdit?.image : null;
 
   const { register, handleSubmit, reset, getValues, formState } =
     useForm<CabinFormData>({
@@ -55,7 +56,17 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
     ev?.preventDefault();
     try {
       if (isEditSession && editId) {
-        editCabin({ newCabinData: data, id: editId });
+        // image already exists and was updated by the user
+        if (typeof data.image !== 'string') {
+          const imageFile = data.image[0] as unknown as File;
+          const imageSrc = await uploadImageToS3AWS(imageFile);
+          editCabin({ newCabinData: { ...data, image: imageSrc }, id: editId });
+
+          // delete image after cabin was updated
+          if (prevImage) await deleteImageFromS3(prevImage);
+        } else {
+          editCabin({ newCabinData: data, id: editId });
+        }
       } else {
         if (!data.image) throw new Error('Cabin Image not selected');
 
