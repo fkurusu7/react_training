@@ -1,7 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { createEditCabin } from '../../services/apiCabins';
 import { deleteImageFromS3, uploadImageToS3AWS } from '../../services/apiS3';
 import type { Cabin, CabinFormData } from '../../types/cabin.type';
 import Button from '../../ui/Button';
@@ -10,6 +7,8 @@ import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
 import Textarea from '../../ui/Textarea';
+import { useCreateCabin } from './useCreateCabin';
+import { useEditCabin } from './useEditCabin';
 
 function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
   const { _id: editId, ...editValues } = cabinToEdit || {};
@@ -22,33 +21,8 @@ function CreateCabinForm({ cabinToEdit }: { cabinToEdit?: Cabin }) {
     });
   const { errors } = formState;
 
-  const queryClient = useQueryClient();
-
-  const { mutate: createCabin, isPending: isCreating } = useMutation({
-    mutationFn: createEditCabin,
-    onSuccess: () => {
-      toast.success('New Cabin created');
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const { mutate: editCabin, isPending: isEditing } = useMutation({
-    mutationFn: ({
-      newCabinData,
-      id,
-    }: {
-      newCabinData: CabinFormData;
-      id: string;
-    }) => createEditCabin(newCabinData, id),
-    onSuccess: () => {
-      toast.success('Cabin updated');
-      queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { mutate: createCabin, isPending: isCreating } = useCreateCabin(reset);
+  const { mutate: editCabin, isPending: isEditing } = useEditCabin(reset);
 
   const isWorking = isCreating || isEditing;
 

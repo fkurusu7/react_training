@@ -24,7 +24,7 @@ export async function uploadImageToS3AWS(image: File) {
   }
 
   const { data: imageUploadURL } = await response.json();
-  console.log(imageUploadURL);
+
   // Upload to AWS S3 bucket
   const awsResponse = await fetch(imageUploadURL, {
     method: 'PUT',
@@ -42,14 +42,12 @@ export async function uploadImageToS3AWS(image: File) {
   }
 
   const publicURL = imageUploadURL.split('?')[0];
-  console.log(`Public AWS URL: ${publicURL}`);
 
   return publicURL;
 }
 
 export async function deleteImageFromS3(imageUrl: string) {
   try {
-    console.log('imageUrl to send to the API:', imageUrl);
     const response = await fetch(`${FILES_URI}/deleteImage`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
