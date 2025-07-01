@@ -4,6 +4,7 @@ import database from '../config/database';
 import { successResponse } from '../types/api.type';
 import cabinsRouter from './cabins.route';
 import filesRouter from './files.route';
+import settingsRouter from './settings.route';
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.get('/health', (req: Request, res: Response) => {
 
 router.use('/api/cabins', cabinsRouter);
 router.use('/api/files', filesRouter);
+router.use('/api/settings', settingsRouter);
 
 export default router;
