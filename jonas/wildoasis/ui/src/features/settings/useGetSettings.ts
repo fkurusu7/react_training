@@ -7,7 +7,10 @@ export function useGetSettings() {
     isPending,
     data: settings,
     error,
-  } = useQuery({ queryKey: ['settings'], queryFn: getSettings });
+  } = useQuery({
+    queryKey: ['settings'],
+    queryFn: getSettings,
+  });
 
   return {
     isPending,

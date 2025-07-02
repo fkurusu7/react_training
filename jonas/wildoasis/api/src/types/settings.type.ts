@@ -10,7 +10,7 @@ const settingsKey = [
 
 export const updateSettingsSchema = z.object({
   setting: z.enum(settingsKey),
-  value: z.number().positive().min(1),
+  value: z.coerce.number().positive().min(1),
 });
 
 type UpdateSettingRequest = z.infer<typeof updateSettingsSchema>;

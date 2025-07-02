@@ -3,7 +3,7 @@ import { type FieldErrors, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { createCabin } from '../../services/apiCabins';
 import { uploadImageToS3AWS } from '../../services/apiS3';
-import type { CabinFormData } from '../../types/cabin.type';
+import type { CabinFormData } from '../../types/responses.type';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Form from '../../ui/Form';

@@ -1,6 +1,6 @@
 import { type FieldErrors, useForm } from 'react-hook-form';
 import { deleteImageFromS3, uploadImageToS3AWS } from '../../services/apiS3';
-import type { Cabin, CabinFormData } from '../../types/cabin.type';
+import type { Cabin, CabinFormData } from '../../types/responses.type';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Form from '../../ui/Form';

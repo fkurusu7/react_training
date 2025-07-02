@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import type { Cabin } from '../../types/cabin.type';
+import type { Cabin } from '../../types/responses.type';
 import SpinnerMini from '../../ui/SpinnerMini';
 import { formatCurrency } from '../../utils/helpers';
 import CreateCabinForm from './CreateCabinForm';

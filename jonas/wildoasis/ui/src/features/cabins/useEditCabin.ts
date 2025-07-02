@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UseFormReset } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { createEditCabin } from '../../services/apiCabins';
-import type { CabinFormData } from '../../types/cabin.type';
+import type { CabinFormData } from '../../types/responses.type';
 
 export function useEditCabin(reset: UseFormReset<CabinFormData>) {
   const queryClient = useQueryClient();

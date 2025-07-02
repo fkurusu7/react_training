@@ -1,27 +1,54 @@
-export async function getSettings() {
-  // const { data, error } = await supabase.from('settings').select('*').single();
-  const data = '';
+import { SETTINGS_URI } from '../types/constants';
+import type {
+  SettingResponse,
+  UpdateSettingRequest,
+} from '../types/responses.type';
 
-  // if (error) {
-  //   console.error(error);
-  //   throw new Error('Settings could not be loaded');
-  // }
-  return data;
+export async function getSettings(): Promise<SettingResponse> {
+  try {
+    const response = await fetch(SETTINGS_URI);
+
+    if (!response.ok) {
+      throw new Error('Settings could not be loaded');
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    // Handle the case where error is not an Error instance
+    throw new Error('An unknown error occurred while loading settings');
+  }
 }
 
 // We expect a newSetting object that looks like {setting: newValue}
-export async function updateSetting(newSetting: object) {
-  // const { data, error } = await supabase
-  //   .from('settings')
-  //   .update(newSetting)
-  //   // There is only ONE row of settings, and it has the ID=1, and so this is the updated one
-  //   .eq('id', 1)
-  //   .single();
+export async function updateSetting(
+  settingValue: UpdateSettingRequest
+): Promise<SettingResponse> {
+  try {
+    const response = await fetch(SETTINGS_URI, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settingValue),
+    });
 
-  // if (error) {
-  //   console.error(error);
-  //   throw new Error('Settings could not be updated');
-  // }
-  console.log(newSetting);
-  return 'data updated';
+    if (!response.ok) {
+      throw new Error(
+        `Error updating setting ${settingValue.setting} with value ${settingValue.value}`
+      );
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error(`Unknown error updating ${settingValue}`);
+  }
 }

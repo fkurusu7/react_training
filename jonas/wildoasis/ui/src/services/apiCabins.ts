@@ -1,5 +1,9 @@
-import type { Cabin, CabinFormData, CabinResponse } from '../types/cabin.type';
 import { CABINS_URI } from '../types/constants';
+import type {
+  Cabin,
+  CabinFormData,
+  CabinResponse,
+} from '../types/responses.type';
 import { deleteImageFromS3 } from './apiS3';
 
 export async function getCabins(): Promise<CabinResponse> {
@@ -22,6 +26,12 @@ export async function getCabins(): Promise<CabinResponse> {
   }
 }
 
+/**
+ * This API function Creates and Updates a Cabin
+ * @param cabin
+ * @param id
+ * @returns
+ */
 export async function createEditCabin(cabin: CabinFormData, id: string = '') {
   try {
     const FETCH_METHOD = !id ? 'POST' : 'PUT';
