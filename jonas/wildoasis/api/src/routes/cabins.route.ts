@@ -9,10 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', getCabins);
-router.post('/', createCabin);
-router.get('/:id', getCabin);
-router.delete('/:id', deleteCabin);
-router.put('/:id', updateCabin);
+router.route('/').get(getCabins).post(createCabin);
+router.route('/:id').get(getCabin).delete(deleteCabin).put(updateCabin);
 
 export default router;

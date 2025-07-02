@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express-serve-static-core';
 import { MongooseError } from 'mongoose';
 import { z } from 'zod';
-import logger from '../config/logger';
 import {
   handleMongoDBError,
   handleZodError,
@@ -40,17 +39,17 @@ export async function updateSetting(
   next: NextFunction
 ) {
   try {
-    logger.warn(`Body: ${JSON.stringify(req.body)}`);
+    // logger.warn(`Body: ${JSON.stringify(req.body)}`);
     const { setting, value } = updateSettingsSchema.parse(req.body);
     // const { setting, value } = req.body;
-    logger.warn(`${setting} : ${value}`);
+    // logger.warn(`${setting} : ${value}`);
 
     const settingUpdated = await Settings.findOneAndUpdate(
       {},
       { $set: { [setting]: value } },
       { new: true }
     );
-    logger.warn(JSON.stringify(settingUpdated));
+    // logger.warn(JSON.stringify(settingUpdated));
 
     res
       .status(200)

@@ -18,7 +18,7 @@ const {
   AWS_BUCKET_REGION,
 } = process.env;
 
-console.log();
+console.clear();
 const nodeEnv =
   NODE_ENV ||
   (() => {
