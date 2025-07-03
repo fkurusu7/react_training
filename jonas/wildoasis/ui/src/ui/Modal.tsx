@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import React from 'react';
+import { createPortal } from 'react-dom';
+import { HiXMark } from 'react-icons/hi2';
+import styled from 'styled-components';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +51,24 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+interface ModalProps {
+  onCloseModal: () => void;
+  children: React.ReactElement;
+}
+
+function Modal({ onCloseModal, children }: ModalProps) {
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button onClick={onCloseModal}>
+          <HiXMark />
+        </Button>
+        <div>{children}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+export default Modal;

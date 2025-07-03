@@ -4,7 +4,10 @@ import toast from 'react-hot-toast';
 import { createEditCabin } from '../../services/apiCabins';
 import type { CabinFormData } from '../../types/responses.type';
 
-export function useCreateCabin(reset: UseFormReset<CabinFormData>) {
+export function useCreateCabin(
+  reset: UseFormReset<CabinFormData>,
+  onCloseModal?: () => void
+) {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -13,6 +16,7 @@ export function useCreateCabin(reset: UseFormReset<CabinFormData>) {
       toast.success('New Cabin created');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
       reset();
+      onCloseModal?.();
     },
     onError: (err) => toast.error(err.message),
   });

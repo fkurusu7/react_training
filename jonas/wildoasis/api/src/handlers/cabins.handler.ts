@@ -160,8 +160,12 @@ export async function deleteCabin(
     res.sendStatus(204);
   } catch (error) {
     if (error instanceof Error) logger.error('Error deleting a Cabin: ', error);
-    res.statusCode = 400;
-    next(error);
+    else if (error instanceof MongooseError) {
+      next(handleMongoDBError(error, res));
+    } else {
+      res.statusCode = 400;
+      next(error);
+    }
   }
 }
 
