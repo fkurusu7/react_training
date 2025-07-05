@@ -10,7 +10,7 @@ type ButtonProps = {
 };
 
 // Style objects
-const sizes = {
+const sizes: Record<ButtonSizeType, ReturnType<typeof css>> = {
   small: css`
     font-size: 1.2rem;
     padding: 0.4rem 0.8rem;
@@ -30,7 +30,7 @@ const sizes = {
   `,
 };
 
-const variations = {
+const variations: Record<ButtonVariationType, ReturnType<typeof css>> = {
   primary: css`
     color: var(--color-brand-50);
     background-color: var(--color-brand-600);
