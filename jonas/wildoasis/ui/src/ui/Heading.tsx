@@ -20,7 +20,7 @@ const headingStyles: Record<HeadingType, ReturnType<typeof css>> = {
     font-weight: 600;
   `,
   h3: css`
-    font-size: 1rem;
+    font-size: 1.8rem;
     font-weight: 500;
   `,
 };
@@ -28,7 +28,7 @@ const headingStyles: Record<HeadingType, ReturnType<typeof css>> = {
 const Heading = styled.h1<HeadingProps>`
   ${(props) => {
     const headingType = props.as as HeadingType;
-    return headingStyles[headingType || 'h1'];
+    return headingStyles[headingType || 'h3'];
   }}
 `;
 

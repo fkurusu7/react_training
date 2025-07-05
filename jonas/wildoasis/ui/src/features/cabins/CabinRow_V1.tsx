@@ -4,10 +4,21 @@ import type { Cabin } from '../../types/responses.type';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Modal from '../../ui/Modal';
 import SpinnerMini from '../../ui/SpinnerMini';
-import Table from '../../ui/Table';
 import { formatCurrency } from '../../utils/helpers';
 import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
+
+const TableRow = styled.div`
+  display: grid;
+  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  column-gap: 2.4rem;
+  align-items: center;
+  padding: 1.4rem 2.4rem;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--color-grey-100);
+  }
+`;
 
 const Img = styled.img`
   display: block;
@@ -36,13 +47,13 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin }: { cabin: Cabin }) {
+function CabinRow_V1({ cabin }: { cabin: Cabin }) {
   const { isPending: isDeleting, mutate: deleteCabin } = useDeleteCabin();
 
   const imageSrc = !cabin.image ? undefined : cabin.image;
 
   return (
-    <Table.Row>
+    <TableRow role='row'>
       <Img src={imageSrc} alt={cabin.name} />
       <Cabin>{cabin.name}</Cabin>
       <div>{cabin.maxCapacity} guests</div>
@@ -74,8 +85,8 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
           </Modal.Window>
         </Modal>
       </div>
-    </Table.Row>
+    </TableRow>
   );
 }
 
-export default CabinRow;
+export default CabinRow_V1;

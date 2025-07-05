@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled, { css } from 'styled-components';
 
 type ButtonVariationType = 'primary' | 'secondary' | 'danger';
@@ -66,7 +65,6 @@ const Button = styled.button<ButtonProps>`
 
   /* sizes */
   ${(props) => sizes[props.size || 'medium']}
-
   /* variations */
   ${(props) => variations[props.variation || 'primary']}
 `;
