@@ -61,7 +61,7 @@ const Button = styled.button`
 interface ModalContextProps {
   openName: string;
   onClose: () => void;
-  onOpen: (s: string) => void;
+  onOpen: (name: string) => void;
 }
 // 1. Create context
 const ModalContext = createContext<ModalContextProps>({

@@ -1,4 +1,5 @@
 import type { Cabin } from '../../types/responses.type';
+import Menus from '../../ui/Menus';
 import Spinner from '../../ui/Spinner';
 
 import Table from '../../ui/Table';
@@ -11,27 +12,29 @@ function CabinTable() {
   if (isPending) return <Spinner />;
 
   return (
-    <Table columns='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
-      <Table.Header>
-        <div></div>
-        <div>Cabin</div>
-        <div>Capacity</div>
-        <div>Price</div>
-        <div>Discount</div>
-        <div></div>
-      </Table.Header>
+    <Menus>
+      <Table columns='0.6fr 1.8fr 2.2fr 1fr 1fr 1fr'>
+        <Table.Header>
+          <div></div>
+          <div>Cabin</div>
+          <div>Capacity</div>
+          <div>Price</div>
+          <div>Discount</div>
+          <div></div>
+        </Table.Header>
 
-      {/* {!cabins?.data?.length ? (
+        {/* {!cabins?.data?.length ? (
         <p>No Cabins, add one!</p>
-      ) : (
-        cabins?.data?.map((cabin) => <CabinRow key={cabin._id} cabin={cabin} />)
-      )} */}
+        ) : (
+          cabins?.data?.map((cabin) => <CabinRow key={cabin._id} cabin={cabin} />)
+          )} */}
 
-      <Table.Body
-        data={cabins?.data}
-        render={(cabin: Cabin) => <CabinRow key={cabin._id} cabin={cabin} />}
-      />
-    </Table>
+        <Table.Body
+          data={cabins?.data}
+          render={(cabin: Cabin) => <CabinRow key={cabin._id} cabin={cabin} />}
+        />
+      </Table>
+    </Menus>
   );
 }
 

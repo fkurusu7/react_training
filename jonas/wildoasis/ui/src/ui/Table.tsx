@@ -110,7 +110,7 @@ function Row({ children }: ChildrenNodeProp) {
 
 interface BodyProps<T> {
   data?: T[];
-  render: (item: T) => React.ReactNode;
+  render: (item: T) => React.ReactElement;
 }
 
 function Body<T>({ data, render }: BodyProps<T>) {

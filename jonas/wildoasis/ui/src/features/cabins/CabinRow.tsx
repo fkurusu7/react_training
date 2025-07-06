@@ -2,6 +2,7 @@ import { HiPencil, HiTrash } from 'react-icons/hi2';
 import styled from 'styled-components';
 import type { Cabin } from '../../types/responses.type';
 import ConfirmDelete from '../../ui/ConfirmDelete';
+import Menus from '../../ui/Menus';
 import Modal from '../../ui/Modal';
 import SpinnerMini from '../../ui/SpinnerMini';
 import Table from '../../ui/Table';
@@ -54,24 +55,32 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
       )}
       <div>
         <Modal>
-          <Modal.Open opensWindowName='editCabin'>
-            <button>
-              <HiPencil />
-            </button>
-          </Modal.Open>
-          <Modal.Window name='editCabin'>
-            <CreateCabinForm cabinToEdit={cabin} />
-          </Modal.Window>
-          <Modal.Open opensWindowName='deleteCabin'>
-            <button>{isDeleting ? <SpinnerMini /> : <HiTrash />}</button>
-          </Modal.Open>
-          <Modal.Window name='deleteCabin'>
-            <ConfirmDelete
-              resourceName='cabin'
-              disabled={isDeleting}
-              onConfirm={() => deleteCabin(cabin)}
-            />
-          </Modal.Window>
+          <Menus.Menu>
+            <Menus.Toggle id={cabin._id} />
+            <Menus.List id={cabin._id}>
+              <Modal.Open opensWindowName='editCabin'>
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+
+              <Modal.Open opensWindowName='deleteCabin'>
+                <Menus.Button icon={<HiTrash />}>
+                  {isDeleting ? <SpinnerMini /> : 'Delete'}
+                </Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name='editCabin'>
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+
+            <Modal.Window name='deleteCabin'>
+              <ConfirmDelete
+                resourceName='cabin'
+                disabled={isDeleting}
+                onConfirm={() => deleteCabin(cabin)}
+              />
+            </Modal.Window>
+          </Menus.Menu>
         </Modal>
       </div>
     </Table.Row>
