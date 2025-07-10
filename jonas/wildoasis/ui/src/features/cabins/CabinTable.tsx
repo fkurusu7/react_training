@@ -20,6 +20,23 @@ function CabinTable() {
   if (filterValue === 'with-discount')
     filteredCabins = cabins?.data?.filter((cabin) => cabin.discount > 0);
 
+  const sortByValue = searchParams.get('sortBy') || '';
+  const [sortField, direction] = sortByValue.split('-');
+  const modifier = direction === 'asc' ? 1 : -1;
+  const sortedCabins = filteredCabins?.sort((a, b) => {
+    const field = sortField as keyof Cabin;
+    const aValue = a[field];
+    const bValue = b[field];
+
+    // Type guard to ensure we're working with numbers
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return (aValue - bValue) * modifier;
+    }
+
+    // Fallback for non-numeric values (convert to string and compare)
+    return String(aValue).localeCompare(String(bValue)) * modifier;
+  });
+
   if (isPending) return <Spinner />;
   return (
     <Menus>
@@ -41,7 +58,7 @@ function CabinTable() {
 
         <Table.Body
           // data={cabins?.data}
-          data={filteredCabins}
+          data={sortedCabins}
           render={(cabin: Cabin) => <CabinRow key={cabin._id} cabin={cabin} />}
         />
       </Table>
