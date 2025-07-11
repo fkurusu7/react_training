@@ -23,9 +23,12 @@ const bookingSchema = new mongoose.Schema(
     },
     guest: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: Guest,
     },
   },
   { timestamps: true }
 );
+
+const Bookings = mongoose.model('Booking', bookingSchema);
+
+export default Bookings;

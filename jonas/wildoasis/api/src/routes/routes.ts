@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import database from '../config/database';
 import { successResponse } from '../types/api.type';
+import bookingsRouter from './bookings.route';
 import cabinsRouter from './cabins.route';
 import filesRouter from './files.route';
 import settingsRouter from './settings.route';
@@ -23,5 +24,6 @@ router.get('/health', (req: Request, res: Response) => {
 router.use('/api/cabins', cabinsRouter);
 router.use('/api/files', filesRouter);
 router.use('/api/settings', settingsRouter);
+router.use('/api/bookings', bookingsRouter);
 
 export default router;

@@ -1,16 +1,18 @@
 import database from '../config/database';
 import logger from '../config/logger';
+import Bookings from '../models/bookings.model';
 import Cabin from '../models/cabins.model';
 import Settings from '../models/settings.model';
-import cabins from './cabins';
+import bookings from './bookings';
 
 const importData = async (): Promise<void> => {
   try {
     database.connect();
-    await Cabin.deleteMany();
-    await Cabin.insertMany(cabins);
+    // await Cabin.deleteMany();
+    // await Cabin.insertMany(cabins);
+    await Bookings.insertMany(bookings);
 
-    await Settings.create({});
+    // await Settings.create({});
 
     logger.success('Data imported!');
   } catch (error) {
