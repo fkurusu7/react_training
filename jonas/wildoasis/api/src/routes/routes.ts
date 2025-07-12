@@ -5,6 +5,7 @@ import { successResponse } from '../types/api.type';
 import bookingsRouter from './bookings.route';
 import cabinsRouter from './cabins.route';
 import filesRouter from './files.route';
+import guestsRouter from './guests.route';
 import settingsRouter from './settings.route';
 
 const router = Router();
@@ -25,5 +26,6 @@ router.use('/api/cabins', cabinsRouter);
 router.use('/api/files', filesRouter);
 router.use('/api/settings', settingsRouter);
 router.use('/api/bookings', bookingsRouter);
+router.use('/api/guests', guestsRouter);
 
 export default router;
