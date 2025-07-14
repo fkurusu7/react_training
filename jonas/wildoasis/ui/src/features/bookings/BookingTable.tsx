@@ -1,10 +1,13 @@
+import { data } from 'react-router-dom';
+import type { Booking } from '../../types/responses.type';
 import Menus from '../../ui/Menus';
 import Spinner from '../../ui/Spinner';
 import Table from '../../ui/Table';
+import BookingRow from './BookingRow';
 import { useBookings } from './useGetBookings';
 
 function BookingTable() {
-  const { data, isPending, error } = useBookings();
+  const { data: bookings, isPending, error } = useBookings();
   console.log('data', data);
   console.log('error', error);
   if (isPending) return <Spinner />;
@@ -21,12 +24,12 @@ function BookingTable() {
           <div></div>
         </Table.Header>
 
-        {/* <Table.Body
-          data={bookings}
-          render={(booking) => (
-            <BookingRow key={booking.id} booking={booking} />
+        <Table.Body
+          data={bookings?.data}
+          render={(booking: Booking) => (
+            <BookingRow key={booking._id} booking={booking} />
           )}
-        /> */}
+        />
       </Table>
     </Menus>
   );

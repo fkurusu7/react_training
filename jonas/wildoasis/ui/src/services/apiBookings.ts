@@ -1,6 +1,28 @@
 // import { getToday } from '../utils/helpers';
 
-export async function getBookings() {}
+import { BOOKINGS_URI } from '../types/constants';
+import type { BookingsResponse } from '../types/responses.type';
+
+export async function getBookings(): Promise<BookingsResponse> {
+  try {
+    const response = await fetch(BOOKINGS_URI);
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error('Booking could not be loaded');
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    // Handle non-Error objects
+    throw new Error('An unknown error occurred');
+  }
+}
 
 /* 
 export async function getBooking(id) {
