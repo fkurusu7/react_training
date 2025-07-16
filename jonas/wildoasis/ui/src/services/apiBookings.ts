@@ -3,8 +3,25 @@
 import { BOOKINGS_URI } from '../types/constants';
 import type { BookingsResponse } from '../types/responses.type';
 
-export async function getBookings(): Promise<BookingsResponse> {
+interface GetBookingsParams {
+  filter: {
+    field: string;
+    value: 'checked-out' | 'checked-in' | 'unconfirmed';
+  } | null;
+  sortBy: { field: 'startDate' | 'totalPrice'; direction: 'desc' | 'asc' };
+}
+
+export async function getBookings({
+  filter,
+  sortBy,
+}: GetBookingsParams): Promise<BookingsResponse> {
   try {
+    console.log('filter', filter);
+    console.log('sortBy', sortBy);
+    /*
+      filter {field: 'status', value: 'checked-out'}
+      sortBy {field: 'totalPrice', direction: 'asc'}
+    */
     const response = await fetch(BOOKINGS_URI);
 
     if (!response.ok && response.status !== 404) {

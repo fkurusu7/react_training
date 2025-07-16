@@ -1,4 +1,3 @@
-import { data } from 'react-router-dom';
 import type { Booking } from '../../types/responses.type';
 import Menus from '../../ui/Menus';
 import Spinner from '../../ui/Spinner';
@@ -8,9 +7,8 @@ import { useBookings } from './useGetBookings';
 
 function BookingTable() {
   const { data: bookings, isPending, error } = useBookings();
-  console.log('data', data);
-  console.log('error', error);
   if (isPending) return <Spinner />;
+  if (error?.message) console.log('error', error);
 
   return (
     <Menus>
