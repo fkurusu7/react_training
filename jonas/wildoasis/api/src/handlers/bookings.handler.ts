@@ -14,18 +14,45 @@ import {
   createBookingSchema,
 } from '../types/bookings.type';
 
+const isEmptyObj = (obj: Record<string, any>): boolean =>
+  Object.keys(obj).length === 0;
+
 export async function getBookings(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const bookings = await Bookings.find({})
+    /*
+      filter {field: 'status', value: 'checked-out'}
+      sortBy {field: 'totalPrice', direction: 'asc'}
+      /api/bookings?filter=%7B%22field%22%3A%22status%22%2C%22value%22%3A%22checked-out%22%7D&sortBy=%7B%22field%22%3A%22startDate%22%2C%22direction%22%3A%22desc%22%7D 
+    */
+
+    const filterQuery =
+      req.query.filter !== 'null'
+        ? (() => {
+            let filter = JSON.parse(req.query.filter as string);
+            return isEmptyObj(filter)
+              ? filter
+              : { [filter.field]: filter.value };
+          })()
+        : {};
+
+    let sort = JSON.parse(req.query.sortBy as string);
+    const sortByQuery = { [sort.field]: sort.direction === 'asc' ? 1 : -1 } as {
+      [key: string]: 1 | -1;
+    };
+    console.log(filterQuery);
+    console.log(sortByQuery);
+
+    const bookings = await Bookings.find(filterQuery)
       .populate('cabin', 'name -_id')
       .populate('guest', 'fullname email -_id')
       .select(
         'createdAt startDate endDate numNights numGuests status totalPrice'
-      );
+      )
+      .sort(sortByQuery);
 
     if (!bookings.length) {
       res.status(404);

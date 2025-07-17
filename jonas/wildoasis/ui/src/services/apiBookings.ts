@@ -21,8 +21,13 @@ export async function getBookings({
     /*
       filter {field: 'status', value: 'checked-out'}
       sortBy {field: 'totalPrice', direction: 'asc'}
+      /api/bookings?filter={field: 'status', value: 'checked-out'}
     */
-    const response = await fetch(BOOKINGS_URI);
+    const urlParams = new URLSearchParams({
+      filter: JSON.stringify(filter).trim(),
+      sortBy: JSON.stringify(sortBy).trim(),
+    });
+    const response = await fetch(`${BOOKINGS_URI}?${urlParams}`);
 
     if (!response.ok && response.status !== 404) {
       throw new Error('Booking could not be loaded');
