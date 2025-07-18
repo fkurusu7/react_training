@@ -16,8 +16,6 @@ export async function getBookings({
   sortBy,
 }: GetBookingsParams): Promise<BookingsResponse> {
   try {
-    console.log('filter', filter);
-    console.log('sortBy', sortBy);
     /*
       filter {field: 'status', value: 'checked-out'}
       sortBy {field: 'totalPrice', direction: 'asc'}

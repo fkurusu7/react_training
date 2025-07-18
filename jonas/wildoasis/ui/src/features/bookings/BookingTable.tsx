@@ -1,5 +1,6 @@
 import type { Booking } from '../../types/responses.type';
 import Menus from '../../ui/Menus';
+import Pagination from '../../ui/Pagination';
 import Spinner from '../../ui/Spinner';
 import Table from '../../ui/Table';
 import BookingRow from './BookingRow';
@@ -28,6 +29,10 @@ function BookingTable() {
             <BookingRow key={booking._id} booking={booking} />
           )}
         />
+
+        <Table.Footer>
+          <Pagination count={35} />
+        </Table.Footer>
       </Table>
     </Menus>
   );

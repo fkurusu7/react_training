@@ -50,14 +50,7 @@ function CabinTable() {
           <div></div>
         </Table.Header>
 
-        {/* {!cabins?.data?.length ? (
-        <p>No Cabins, add one!</p>
-        ) : (
-          cabins?.data?.map((cabin) => <CabinRow key={cabin._id} cabin={cabin} />)
-          )} */}
-
         <Table.Body
-          // data={cabins?.data}
           data={sortedCabins}
           render={(cabin: Cabin) => <CabinRow key={cabin._id} cabin={cabin} />}
         />
