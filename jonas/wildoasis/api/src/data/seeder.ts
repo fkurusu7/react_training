@@ -10,6 +10,7 @@ const importData = async (): Promise<void> => {
     database.connect();
     // await Cabin.deleteMany();
     // await Cabin.insertMany(cabins);
+    await Bookings.deleteMany();
     await Bookings.insertMany(bookings);
 
     // await Settings.create({});

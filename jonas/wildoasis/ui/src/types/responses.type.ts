@@ -40,6 +40,11 @@ export interface Booking {
   createdAt: string;
 }
 
+export interface BookingWithPagination {
+  bookings: Booking[];
+  totalDocuments: number;
+}
+
 // API Requests
 // Form data (data without _id for creation)
 export type CabinFormData = Omit<Cabin, '_id'>;
@@ -55,3 +60,4 @@ export type CabinResponse = ApiResponse<Cabin[]>;
 export type CabinSingleResponse = ApiResponse<Cabin>;
 export type SettingResponse = ApiResponse<Settings>;
 export type BookingsResponse = ApiResponse<Booking[]>;
+export type BookingsWithPaginationResponse = ApiResponse<BookingWithPagination>;

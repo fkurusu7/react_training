@@ -7,7 +7,7 @@ import BookingRow from './BookingRow';
 import { useBookings } from './useGetBookings';
 
 function BookingTable() {
-  const { data: bookings, isPending, error } = useBookings();
+  const { data: bookingsData, isPending, error } = useBookings();
   if (isPending) return <Spinner />;
   if (error?.message) console.log('error', error);
 
@@ -24,14 +24,14 @@ function BookingTable() {
         </Table.Header>
 
         <Table.Body
-          data={bookings?.data}
+          data={bookingsData?.data.bookings}
           render={(booking: Booking) => (
             <BookingRow key={booking._id} booking={booking} />
           )}
         />
 
         <Table.Footer>
-          <Pagination count={35} />
+          <Pagination count={bookingsData?.data.totalDocuments as number} />
         </Table.Footer>
       </Table>
     </Menus>

@@ -6,6 +6,7 @@ export function useBookings() {
   // ?status=all&sortBy=startDate-asc
   const [searchParams] = useSearchParams();
 
+  // Filter Data by status field
   const filterValue = searchParams.get('status');
 
   const filter =
@@ -16,6 +17,7 @@ export function useBookings() {
           value: filterValue as 'checked-out' | 'checked-in' | 'unconfirmed',
         };
 
+  // Sort Data by startDate or totalPrice fields
   const sortByValue = searchParams.get('sortBy') || 'startDate-desc';
   const [field, direction] = sortByValue.split('-');
   const sortBy = {
@@ -23,10 +25,14 @@ export function useBookings() {
     direction: direction as 'desc' | 'asc',
   };
 
+  // Handle Pagination
+  const page = searchParams.get('page') || '1';
+
   const { isPending, data, error } = useQuery({
-    queryKey: ['bookings', filter, sortBy],
-    queryFn: () => getBookings({ filter, sortBy }),
+    queryKey: ['bookings', filter, sortBy, page],
+    queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
+  console.log('data useBookings', data);
   return { isPending, data, error };
 }

@@ -26,26 +26,43 @@ export async function getBookings(
     /*
       filter {field: 'status', value: 'checked-out'}
       sortBy {field: 'totalPrice', direction: 'asc'}
-      /api/bookings?filter=%7B%22field%22%3A%22status%22%2C%22value%22%3A%22checked-out%22%7D&sortBy=%7B%22field%22%3A%22startDate%22%2C%22direction%22%3A%22desc%22%7D 
+      GET /api/bookings?
+        filter=null
+        &sortBy=%7B%22field%22%3A%22startDate%22%2C%22direction%22%3A%22desc%22%7D
+        &limit=10
+        &startIndex=31 
     */
+    const startIndex = parseInt(req.query.startIndex as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 10;
 
+    console.log(!req.query);
     const filterQuery =
-      req.query.filter !== 'null'
-        ? (() => {
+      !req.query.filter || req.query.filter === 'null'
+        ? {}
+        : (() => {
             let filter = JSON.parse(req.query.filter as string);
             return isEmptyObj(filter)
               ? filter
               : { [filter.field]: filter.value };
-          })()
-        : {};
+          })();
 
-    let sort = JSON.parse(req.query.sortBy as string);
-    const sortByQuery = { [sort.field]: sort.direction === 'asc' ? 1 : -1 } as {
-      [key: string]: 1 | -1;
-    };
-    console.log(filterQuery);
-    console.log(sortByQuery);
+    const sortByQuery = !req.query.sortBy
+      ? ({ startDate: -1 } as {
+          [key: string]: 1 | -1;
+        })
+      : (() => {
+          let sort = JSON.parse(req.query.sortBy as string);
+          return { [sort.field]: sort.direction === 'asc' ? 1 : -1 } as {
+            [key: string]: 1 | -1;
+          };
+        })();
 
+    const totalDocuments = await Bookings.estimatedDocumentCount();
+    console.log('totalDocuments', totalDocuments);
+    console.log('filterQuery', filterQuery);
+    console.log('sortByQuery', sortByQuery);
+    console.log('limit', limit);
+    console.log('startIndex', startIndex);
     const bookings = await Bookings.find(filterQuery)
       .populate('cabin', 'name -_id')
       .populate('guest', 'fullname email -_id')
@@ -53,15 +70,22 @@ export async function getBookings(
         'createdAt startDate endDate numNights numGuests status totalPrice'
       )
       .sort(sortByQuery);
+    // .skip(startIndex)
+    // .limit(limit);
 
     if (!bookings.length) {
       res.status(404);
       throw new Error('Resources not found');
     }
-
+    console.log({ bookings, totalDocuments });
     res
       .status(200)
-      .send(successResponse(bookings, 'Bookings fetched successfully'));
+      .send(
+        successResponse(
+          { bookings, totalDocuments },
+          'Bookings fetched successfully'
+        )
+      );
   } catch (error) {
     if (configApp.server.nodeEnv === 'development' && error instanceof Error) {
       logger.error('Error fetching Products', error);

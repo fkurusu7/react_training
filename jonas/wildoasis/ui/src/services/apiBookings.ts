@@ -1,7 +1,8 @@
 // import { getToday } from '../utils/helpers';
 
 import { BOOKINGS_URI } from '../types/constants';
-import type { BookingsResponse } from '../types/responses.type';
+import type { BookingsWithPaginationResponse } from '../types/responses.type';
+import { PAGE_SIZE } from '../utils/constants';
 
 interface GetBookingsParams {
   filter: {
@@ -9,22 +10,28 @@ interface GetBookingsParams {
     value: 'checked-out' | 'checked-in' | 'unconfirmed';
   } | null;
   sortBy: { field: 'startDate' | 'totalPrice'; direction: 'desc' | 'asc' };
+  page: string;
 }
 
 export async function getBookings({
   filter,
   sortBy,
-}: GetBookingsParams): Promise<BookingsResponse> {
+  page,
+}: GetBookingsParams): Promise<BookingsWithPaginationResponse> {
   try {
     /*
       filter {field: 'status', value: 'checked-out'}
       sortBy {field: 'totalPrice', direction: 'asc'}
       /api/bookings?filter={field: 'status', value: 'checked-out'}
     */
+    // console.log('page', page);
     const urlParams = new URLSearchParams({
       filter: JSON.stringify(filter).trim(),
       sortBy: JSON.stringify(sortBy).trim(),
+      limit: String(PAGE_SIZE),
+      startIndex: String((+page - 1) * PAGE_SIZE + 1),
     });
+    // console.log(urlParams.toString());
     const response = await fetch(`${BOOKINGS_URI}?${urlParams}`);
 
     if (!response.ok && response.status !== 404) {
