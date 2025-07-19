@@ -57,27 +57,29 @@ export async function getBookings(
           };
         })();
 
-    const totalDocuments = await Bookings.estimatedDocumentCount();
+    const totalDocuments = await Bookings.countDocuments(filterQuery);
+    /* 
     console.log('totalDocuments', totalDocuments);
     console.log('filterQuery', filterQuery);
     console.log('sortByQuery', sortByQuery);
     console.log('limit', limit);
-    console.log('startIndex', startIndex);
+    console.log('startIndex', startIndex); */
     const bookings = await Bookings.find(filterQuery)
       .populate('cabin', 'name -_id')
       .populate('guest', 'fullname email -_id')
       .select(
         'createdAt startDate endDate numNights numGuests status totalPrice'
       )
-      .sort(sortByQuery);
-    // .skip(startIndex)
-    // .limit(limit);
+      .sort(sortByQuery)
+      .skip(startIndex)
+      .limit(limit);
 
     if (!bookings.length) {
       res.status(404);
       throw new Error('Resources not found');
     }
-    console.log({ bookings, totalDocuments });
+    console.log('totalDocuments', totalDocuments);
+
     res
       .status(200)
       .send(
