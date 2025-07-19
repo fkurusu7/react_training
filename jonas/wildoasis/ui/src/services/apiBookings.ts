@@ -29,7 +29,7 @@ export async function getBookings({
       filter: JSON.stringify(filter).trim(),
       sortBy: JSON.stringify(sortBy).trim(),
       limit: String(PAGE_SIZE),
-      startIndex: String((+page - 1) * PAGE_SIZE + 1),
+      startIndex: String((+page - 1) * PAGE_SIZE),
     });
     // console.log(urlParams.toString());
     const response = await fetch(`${BOOKINGS_URI}?${urlParams}`);

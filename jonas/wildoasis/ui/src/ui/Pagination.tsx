@@ -67,7 +67,6 @@ function Pagination({ count }: { count: number }) {
     ? 1
     : Number(searchParams.get('page'));
 
-  console.log('count PAGI', count);
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
   function nextPage() {

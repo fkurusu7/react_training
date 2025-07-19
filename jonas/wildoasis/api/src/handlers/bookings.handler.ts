@@ -35,7 +35,6 @@ export async function getBookings(
     const startIndex = parseInt(req.query.startIndex as string) || 0;
     const limit = parseInt(req.query.limit as string) || 10;
 
-    console.log(!req.query);
     const filterQuery =
       !req.query.filter || req.query.filter === 'null'
         ? {}
@@ -78,7 +77,6 @@ export async function getBookings(
       res.status(404);
       throw new Error('Resources not found');
     }
-    console.log('totalDocuments', totalDocuments);
 
     res
       .status(200)
