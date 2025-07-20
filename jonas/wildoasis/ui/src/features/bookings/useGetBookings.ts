@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { getBookings } from '../../services/apiBookings';
+import { PAGE_SIZE } from '../../utils/constants';
 
 export function useBookings() {
   // ?status=all&sortBy=startDate-asc
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
 
   // Filter Data by status field
   const filterValue = searchParams.get('status');
@@ -33,6 +35,22 @@ export function useBookings() {
     queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
-  console.log('data useBookings', data);
+  // PRE-FETCHING
+  const pageCount = Math.ceil(
+    (data?.data.totalDocuments as number) / PAGE_SIZE
+  );
+  if (+page < pageCount) {
+    queryClient.prefetchQuery({
+      queryKey: ['bookings', filter, sortBy, String(+page + 1)],
+      queryFn: () => getBookings({ filter, sortBy, page: String(+page + 1) }),
+    });
+  }
+  if (+page > 1) {
+    queryClient.prefetchQuery({
+      queryKey: ['bookings', filter, sortBy, String(+page - 1)],
+      queryFn: () => getBookings({ filter, sortBy, page: String(+page - 1) }),
+    });
+  }
+
   return { isPending, data, error };
 }
