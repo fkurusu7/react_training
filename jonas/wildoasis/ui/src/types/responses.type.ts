@@ -30,12 +30,20 @@ export interface Booking {
   numGuests: number;
   totalPrice: number;
   status: 'unconfirmed' | 'checked-in' | 'checked-out';
+  observations: string;
+  isPaid: string;
+  hasBreakfast: string;
+  cabinPrice: string;
+  extrasPrice: string;
   cabin: {
     name: string;
   };
   guest: {
     fullname: string;
     email: string;
+    country: string;
+    countryFlag: string;
+    nationalId: string;
   };
   createdAt: string;
 }
@@ -60,4 +68,5 @@ export type CabinResponse = ApiResponse<Cabin[]>;
 export type CabinSingleResponse = ApiResponse<Cabin>;
 export type SettingResponse = ApiResponse<Settings>;
 export type BookingsResponse = ApiResponse<Booking[]>;
+export type BookingSingleResponse = ApiResponse<Booking>;
 export type BookingsWithPaginationResponse = ApiResponse<BookingWithPagination>;

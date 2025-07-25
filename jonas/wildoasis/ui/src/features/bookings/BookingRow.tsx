@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import Table from '../../ui/Table';
 import Tag from '../../ui/Tag';
 
+import { HiEye } from 'react-icons/hi2';
+import { useNavigate } from 'react-router-dom';
 import type { Booking } from '../../types/responses.type';
+import Menus from '../../ui/Menus';
 import { formatCurrency, formatDistanceFromNow } from '../../utils/helpers';
 
 const Cabin = styled.div`
@@ -41,6 +44,8 @@ function BookingRow({ booking }: { booking: Booking }) {
     'checked-out': 'silver',
   };
 
+  const navigate = useNavigate();
+
   return (
     <Table.Row>
       <Cabin>{booking.cabin.name}</Cabin>
@@ -68,6 +73,18 @@ function BookingRow({ booking }: { booking: Booking }) {
       </Tag>
 
       <Amount>{formatCurrency(booking.totalPrice)}</Amount>
+
+      <Menus.Menu>
+        <Menus.Toggle id={booking._id} />
+        <Menus.List id={booking._id}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${booking._id}`)}
+          >
+            See details
+          </Menus.Button>
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }

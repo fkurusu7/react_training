@@ -1,7 +1,10 @@
 // import { getToday } from '../utils/helpers';
 
 import { BOOKINGS_URI } from '../types/constants';
-import type { BookingsWithPaginationResponse } from '../types/responses.type';
+import type {
+  BookingSingleResponse,
+  BookingsWithPaginationResponse,
+} from '../types/responses.type';
 import { PAGE_SIZE } from '../utils/constants';
 
 interface GetBookingsParams {
@@ -11,6 +14,26 @@ interface GetBookingsParams {
   } | null;
   sortBy: { field: 'startDate' | 'totalPrice'; direction: 'desc' | 'asc' };
   page: string;
+}
+
+export async function getBooking(id: string): Promise<BookingSingleResponse> {
+  try {
+    const response = await fetch(`${BOOKINGS_URI}/${id}`);
+    if (!response.ok) {
+      throw new Error('Error fetching Booking Data');
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    // Handle non-Error objects
+    throw new Error('An unknown error occurred');
+  }
 }
 
 export async function getBookings({
@@ -31,7 +54,8 @@ export async function getBookings({
       limit: String(PAGE_SIZE),
       startIndex: String((+page - 1) * PAGE_SIZE),
     });
-    // console.log(urlParams.toString());
+
+    // filter=null&sortBy=%7B%22field%22%3A%22startDate%22%2C%22direction%22%3A%22desc%22%7D&limit=10&startIndex=10
     const response = await fetch(`${BOOKINGS_URI}?${urlParams}`);
 
     if (!response.ok && response.status !== 404) {
