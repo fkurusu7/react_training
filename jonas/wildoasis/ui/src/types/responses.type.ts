@@ -31,7 +31,7 @@ export interface Booking {
   totalPrice: number;
   status: 'unconfirmed' | 'checked-in' | 'checked-out';
   observations: string;
-  isPaid: string;
+  isPaid: boolean;
   hasBreakfast: string;
   cabinPrice: string;
   extrasPrice: string;

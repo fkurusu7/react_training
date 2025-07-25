@@ -69,7 +69,7 @@ const Guest = styled.div`
   }
 `;
 
-const Price = styled.div<{ isPaid: string }>`
+const Price = styled.div<{ $isPaid: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,9 +78,9 @@ const Price = styled.div<{ isPaid: string }>`
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? 'var(--color-green-100)' : 'var(--color-yellow-100)'};
+    props.$isPaid ? 'var(--color-green-100)' : 'var(--color-yellow-100)'};
   color: ${(props) =>
-    props.isPaid ? 'var(--color-green-700)' : 'var(--color-yellow-700)'};
+    props.$isPaid ? 'var(--color-green-700)' : 'var(--color-yellow-700)'};
 
   & p:last-child {
     text-transform: uppercase;
@@ -104,6 +104,7 @@ const Footer = styled.footer`
 
 // A purely presentational component
 function BookingDataBox({ booking }: { booking: Booking }) {
+  console.log('booking.isPaid', booking.isPaid);
   /* const {
     created_at,
     startDate,
@@ -171,7 +172,7 @@ function BookingDataBox({ booking }: { booking: Booking }) {
           {booking.hasBreakfast ? 'Yes' : 'No'}
         </DataItem>
 
-        <Price isPaid={booking.isPaid}>
+        <Price $isPaid={booking.isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(booking.totalPrice)}
 
