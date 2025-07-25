@@ -17,6 +17,37 @@ import {
 const isEmptyObj = (obj: Record<string, any>): boolean =>
   Object.keys(obj).length === 0;
 
+export async function getBooking(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const id = req.params.id;
+
+    const booking = await Bookings.findById(id)
+      .populate('cabin', 'name -_id')
+      .populate(
+        'guest',
+        'fullname email nationality nationalId countryFlag -_id'
+      );
+
+    if (!booking) {
+      res.status(404);
+      throw new Error('Resources not found');
+    }
+
+    res
+      .status(200)
+      .send(successResponse(booking, 'Booking fetched successfully!'));
+  } catch (error) {
+    if (configApp.server.nodeEnv === 'development' && error instanceof Error) {
+      logger.error('Error fetching Products', error);
+    }
+    next(error);
+  }
+}
+
 export async function getBookings(
   req: Request,
   res: Response,
