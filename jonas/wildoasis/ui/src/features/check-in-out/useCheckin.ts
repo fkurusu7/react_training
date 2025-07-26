@@ -11,7 +11,7 @@ export function useCheckin() {
     mutationFn: (bookingId: string) =>
       updateBooking(bookingId, { status: 'checked-in', isPaid: true }),
     onSuccess: (data) => {
-      toast.success(`Booking #${data} successfully checked in`);
+      toast.success(`Booking #${data.data._id} successfully checked in`);
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
       navigate('/bookings');
     },

@@ -17,8 +17,18 @@ export const createBookingSchema = z.object({
   guest: z.string().min(10),
 });
 
+export const updateBookingSchema = z.object({
+  status: z.enum(['unconfirmed', 'checked-in', 'checked-out']),
+  isPaid: z.boolean(),
+});
+
 type CreateBookingRequest = z.infer<typeof createBookingSchema>;
+type UpdateBookingrequest = z.infer<typeof updateBookingSchema>;
 
 export interface CreateBookingRequestWithBody extends Request {
   body: CreateBookingRequest;
+}
+
+export interface UpdateBookingRequestWithBody extends Request {
+  body: UpdateBookingrequest;
 }

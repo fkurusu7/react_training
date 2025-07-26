@@ -77,8 +77,8 @@ export async function getBookings({
 
 export async function updateBooking(
   id: string,
-  fieldsToUpdate: { status: 'checked-in'; isPaid: true }
-) {
+  fieldsToUpdate: { status: 'checked-in'; isPaid: boolean }
+): Promise<BookingSingleResponse> {
   try {
     const response = await fetch(`${BOOKINGS_URI}/${id}`, {
       method: 'PATCH',
@@ -91,7 +91,7 @@ export async function updateBooking(
     }
 
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.log('error', error);

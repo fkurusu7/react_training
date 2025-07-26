@@ -12,6 +12,8 @@ import { successResponse } from '../types/api.type';
 import {
   CreateBookingRequestWithBody,
   createBookingSchema,
+  UpdateBookingRequestWithBody,
+  updateBookingSchema,
 } from '../types/bookings.type';
 
 const isEmptyObj = (obj: Record<string, any>): boolean =>
@@ -161,6 +163,40 @@ export async function createBooking(
 
     if (error instanceof z.ZodError) {
       console.log('zod');
+      next(handleZodError(error, res));
+    } else if (error instanceof MongooseError) {
+      next(handleMongoDBError(error, res));
+    } else {
+      next(error);
+    }
+  }
+}
+
+export async function updateBooking(
+  req: UpdateBookingRequestWithBody,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const id = req.params.id;
+    const body = updateBookingSchema.parse(req.body);
+    const fields = { status: body.status, isPaid: body.isPaid };
+
+    const bookingUpdated = await Bookings.findByIdAndUpdate(
+      { _id: id },
+      fields,
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .send(successResponse(bookingUpdated, 'Booking updated successfully'));
+  } catch (error) {
+    if (configApp.server.nodeEnv === 'development' && error instanceof Error) {
+      logger.error('HANDLED: Error creating a Booking: ', error);
+    }
+
+    if (error instanceof z.ZodError) {
       next(handleZodError(error, res));
     } else if (error instanceof MongooseError) {
       next(handleMongoDBError(error, res));
