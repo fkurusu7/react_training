@@ -75,19 +75,47 @@ export async function getBookings({
   }
 }
 
+export async function updateBooking(
+  id: string,
+  fieldsToUpdate: { status: 'checked-in'; isPaid: true }
+) {
+  try {
+    const response = await fetch(`${BOOKINGS_URI}/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fieldsToUpdate),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error updating booking data');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    // Handle non-Error objects
+    throw new Error('An unknown error occurred');
+  }
+}
+
 /* 
-export async function getBooking(id) {
+export async function updateBooking(id, obj) {
   const { data, error } = await supabase
     .from('bookings')
-    .select('*, cabins(*), guests(*)')
+    .update(obj)
     .eq('id', id)
+    .select()
     .single();
 
   if (error) {
     console.error(error);
-    throw new Error('Booking not found');
+    throw new Error('Booking could not be updated');
   }
-
   return data;
 }
 
@@ -145,20 +173,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-export async function updateBooking(id, obj) {
-  const { data, error } = await supabase
-    .from('bookings')
-    .update(obj)
-    .eq('id', id)
-    .select()
-    .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error('Booking could not be updated');
-  }
-  return data;
-}
 
 export async function deleteBooking(id) {
   // REMEMBER RLS POLICIES

@@ -7,7 +7,7 @@ export function useGetBooking() {
   const { bookingId } = useParams();
 
   const { isPending, data } = useQuery<BookingSingleResponse>({
-    queryKey: ['bookings'],
+    queryKey: ['booking', bookingId],
     queryFn: () => getBooking(bookingId as string),
     retry: false,
   });
