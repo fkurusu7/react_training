@@ -11,6 +11,8 @@ export function useBookings() {
   // Filter Data by status field
   const filterValue = searchParams.get('status');
 
+  // TODO: change page to 1 if status is different from previous one
+
   const filter =
     !filterValue || filterValue === 'all'
       ? null

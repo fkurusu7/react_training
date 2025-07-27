@@ -180,7 +180,16 @@ export async function updateBooking(
   try {
     const id = req.params.id;
     const body = updateBookingSchema.parse(req.body);
-    const fields = { status: body.status, isPaid: body.isPaid };
+
+    let fields = {
+      status: body.status,
+      isPaid: body.isPaid,
+      ...(body.hasBreakfast && {
+        hasBreakfast: body.hasBreakfast,
+        extrasPrice: body.extrasPrice,
+        totalPrice: body.totalPrice,
+      }),
+    };
 
     const bookingUpdated = await Bookings.findByIdAndUpdate(
       { _id: id },

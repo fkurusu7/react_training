@@ -75,9 +75,17 @@ export async function getBookings({
   }
 }
 
+interface BookingUpdateFields {
+  status: 'checked-in';
+  isPaid: boolean;
+  hasBreakfast?: boolean;
+  extrasPrice?: number;
+  totalPrice?: number;
+}
+
 export async function updateBooking(
   id: string,
-  fieldsToUpdate: { status: 'checked-in'; isPaid: boolean }
+  fieldsToUpdate: BookingUpdateFields
 ): Promise<BookingSingleResponse> {
   try {
     const response = await fetch(`${BOOKINGS_URI}/${id}`, {

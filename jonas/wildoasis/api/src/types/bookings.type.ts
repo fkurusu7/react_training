@@ -20,6 +20,9 @@ export const createBookingSchema = z.object({
 export const updateBookingSchema = z.object({
   status: z.enum(['unconfirmed', 'checked-in', 'checked-out']),
   isPaid: z.boolean(),
+  hasBreakfast: z.boolean().optional(),
+  extrasPrice: z.coerce.number().positive().optional(),
+  totalPrice: z.coerce.number().positive().optional(),
 });
 
 type CreateBookingRequest = z.infer<typeof createBookingSchema>;
