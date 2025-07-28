@@ -9,10 +9,13 @@ import Tag from '../../ui/Tag';
 
 import { useNavigate } from 'react-router-dom';
 import { useMoveBack } from '../../hooks/useMoveBack';
+import ConfirmDelete from '../../ui/ConfirmDelete';
+import Modal from '../../ui/Modal';
 import Spinner from '../../ui/Spinner';
 import SpinnerMini from '../../ui/SpinnerMini';
 import { useCheckout } from '../check-in-out/useCheckout';
 import BookingDataBox from './BookingDataBox';
+import { useDeleteBooking } from './useDeleteBooking';
 import { useGetBooking } from './useGetBookin';
 
 // A page should not fetch data and also not have any other side effects no hardRULE
@@ -26,6 +29,7 @@ function BookingDetail() {
   const navigate = useNavigate();
   const { isPending, data: booking } = useGetBooking();
   const { checkingOutFn, isCheckingOut } = useCheckout();
+  const { isDeletingBooking, deleteBookingApi } = useDeleteBooking();
 
   const moveBack = useMoveBack();
 
@@ -62,6 +66,21 @@ function BookingDetail() {
             {isCheckingOut ? <SpinnerMini /> : 'Check out'}
           </Button>
         )}
+
+        <Modal>
+          <Modal.Open opensWindowName='deleteBooking'>
+            <Button variation='danger'>Delete Booking</Button>
+          </Modal.Open>
+          <Modal.Window name='deleteBooking'>
+            <ConfirmDelete
+              resourceName='booking'
+              onConfirm={() =>
+                deleteBookingApi(id, { onSettled: () => navigate(-1) })
+              }
+              disabled={isDeletingBooking}
+            />
+          </Modal.Window>
+        </Modal>
 
         <Button variation='secondary' onClick={moveBack}>
           Back

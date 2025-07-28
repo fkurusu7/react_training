@@ -111,6 +111,27 @@ export async function updateBooking(
   }
 }
 
+export async function deleteBooking(id: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${BOOKINGS_URI}/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Error deleting Booking');
+    }
+
+    return true;
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    // Handle non-Error objects
+    throw new Error(`An unknown error occurred: ${error}`);
+  }
+}
+
 /* 
 export async function updateBooking(id, obj) {
   const { data, error } = await supabase
