@@ -76,8 +76,8 @@ export async function getBookings({
 }
 
 interface BookingUpdateFields {
-  status: 'checked-in';
-  isPaid: boolean;
+  status: 'checked-in' | 'checked-out' | 'unconfirmed';
+  isPaid?: boolean;
   hasBreakfast?: boolean;
   extrasPrice?: number;
   totalPrice?: number;

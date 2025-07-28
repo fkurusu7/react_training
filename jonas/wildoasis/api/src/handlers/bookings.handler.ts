@@ -183,7 +183,7 @@ export async function updateBooking(
 
     let fields = {
       status: body.status,
-      isPaid: body.isPaid,
+      ...(body.status === 'checked-in' && { isPaid: body.isPaid }),
       ...(body.hasBreakfast && {
         hasBreakfast: body.hasBreakfast,
         extrasPrice: body.extrasPrice,
