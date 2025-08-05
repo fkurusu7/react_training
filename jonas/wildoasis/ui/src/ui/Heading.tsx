@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 // Define a union type for valid heading types
-type HeadingType = 'h1' | 'h2' | 'h3';
+type HeadingType = 'h1' | 'h2' | 'h3' | 'h4';
 
 type HeadingProps = {
   // Using $ prefix for transient props
@@ -22,6 +22,11 @@ const headingStyles: Record<HeadingType, ReturnType<typeof css>> = {
   h3: css`
     font-size: 1.8rem;
     font-weight: 500;
+  `,
+  h4: css`
+    font-size: 2rem;
+    font-weight: 900;
+    text-align: center;
   `,
 };
 
