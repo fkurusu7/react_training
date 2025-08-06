@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Signout from '../features/authentication/Signout';
 
 const StyledHeader = styled.header`
   grid-column: 2 / -1;
@@ -9,7 +10,11 @@ const StyledHeader = styled.header`
 `;
 
 function Header() {
-  return <StyledHeader>Header</StyledHeader>;
+  return (
+    <StyledHeader>
+      <Signout />
+    </StyledHeader>
+  );
 }
 
 export default Header;

@@ -8,12 +8,13 @@ import Bookings from './pages/Bookings';
 import Cabins from './pages/Cabins';
 import Checkin from './pages/Checkin';
 import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 import Settings from './pages/Settings';
+import Signin from './pages/Signin';
 import NewUsers from './pages/Users';
 import GlobalStyles from './styles/GlobalStyles';
 import AppLayout from './ui/AppLayout';
+import ProtectedRoute from './ui/ProtectedRoute';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,13 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate replace to='dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='cabins' element={<Cabins />} />
@@ -41,7 +48,7 @@ function App() {
             <Route path='settings' element={<Settings />} />
             <Route path='account' element={<Account />} />
           </Route>
-          <Route path='login' element={<Login />} />
+          <Route path='signin' element={<Signin />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

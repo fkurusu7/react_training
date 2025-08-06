@@ -28,3 +28,15 @@ export async function signinAPI(credentials: SignInProps): Promise<void> {
     throw error;
   }
 }
+
+export async function getCurrentUserApi() {
+  // TODO: Get user from cookies? session? localStorage?
+  // if(!user) return null
+  // return user
+
+  return null;
+}
+
+export async function signoutApi() {
+  // TODO: implement sign out functionality
+}
