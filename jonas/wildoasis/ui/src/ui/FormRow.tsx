@@ -41,7 +41,7 @@ type FormRowProps = {
   label?: string | undefined;
   error?: string | undefined;
   id?: string;
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 function FormRow({ label, error, id, children }: FormRowProps) {

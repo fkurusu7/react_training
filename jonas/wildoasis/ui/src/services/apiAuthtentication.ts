@@ -1,4 +1,25 @@
 import { AUTH_URI } from '../types/constants';
+import type { SignupFormData } from '../types/responses.type';
+
+export async function signupAPI(signupData: SignupFormData) {
+  try {
+    const response = await fetch(AUTH_URI, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(signupData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error Signing up');
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log('error', error);
+  }
+}
 
 interface SignInProps {
   email: string;

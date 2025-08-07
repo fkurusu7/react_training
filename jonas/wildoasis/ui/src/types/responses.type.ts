@@ -14,6 +14,14 @@ export interface Cabin {
   discount: number;
 }
 
+export interface User {
+  _id: string;
+  fullname: string;
+  email: string;
+  password: string;
+  passwordConfirm?: string;
+}
+
 export interface Settings {
   _id: string;
   minBookingLength: number;
@@ -62,6 +70,9 @@ export interface UpdateSettingRequest {
   setting: keyof Omit<Settings, '_id'>;
   value: number;
 }
+
+// User
+export type SignupFormData = Omit<User, '_id'>;
 
 // API Responses
 export type CabinResponse = ApiResponse<Cabin[]>;
